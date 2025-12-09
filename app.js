@@ -31,8 +31,8 @@ try {
 
 // State
 const state = {
-    partner1: { ready: false, name: '' },
-    partner2: { ready: false, name: '' }
+    partner1: { ready: false, name: 'Arthur' },
+    partner2: { ready: false, name: 'Bernice' }
 };
 
 // DOM Elements
@@ -40,31 +40,12 @@ const partner1Btn = document.getElementById('partner1-btn');
 const partner2Btn = document.getElementById('partner2-btn');
 const partner1Status = document.getElementById('partner1-status');
 const partner2Status = document.getElementById('partner2-status');
-const partner1Name = document.getElementById('partner1-name');
-const partner2Name = document.getElementById('partner2-name');
 const celebration = document.getElementById('celebration');
 const connectionPulse = document.getElementById('connection-pulse');
 
-// Load saved names from localStorage
-function loadNames() {
-    const savedName1 = localStorage.getItem('partner1-name');
-    const savedName2 = localStorage.getItem('partner2-name');
-    
-    if (savedName1) {
-        partner1Name.value = savedName1;
-        state.partner1.name = savedName1;
-    }
-    if (savedName2) {
-        partner2Name.value = savedName2;
-        state.partner2.name = savedName2;
-    }
-}
-
-// Save names to localStorage
-function saveName(partner, name) {
-    localStorage.setItem(`${partner}-name`, name);
-    state[partner].name = name;
-}
+// Set fixed names in localStorage for messages page
+localStorage.setItem('partner1-name', 'Arthur');
+localStorage.setItem('partner2-name', 'Bernice');
 
 // Update UI based on state
 function updateUI() {
@@ -139,22 +120,36 @@ function setupFirebaseListeners() {
 partner1Btn.addEventListener('click', () => toggleReady('partner1'));
 partner2Btn.addEventListener('click', () => toggleReady('partner2'));
 
-partner1Name.addEventListener('input', (e) => saveName('partner1', e.target.value));
-partner2Name.addEventListener('input', (e) => saveName('partner2', e.target.value));
-
 // Close celebration when clicked
 celebration.addEventListener('click', () => {
     celebration.classList.remove('active');
 });
 
-// Reset at midnight (optional - fresh start each day)
-function checkMidnightReset() {
+// Get the current reset period ID (changes at 4 PM UTC daily)
+function getResetPeriodId() {
     const now = new Date();
-    const lastReset = localStorage.getItem('lastReset');
-    const today = now.toDateString();
+    const utcHours = now.getUTCHours();
+    const utcDate = now.getUTCDate();
+    const utcMonth = now.getUTCMonth();
+    const utcYear = now.getUTCFullYear();
     
-    if (lastReset !== today) {
-        // New day, reset states
+    // If before 4 PM UTC, we're in the previous day's period
+    if (utcHours < 16) {
+        // Use yesterday's date for the period ID
+        const yesterday = new Date(Date.UTC(utcYear, utcMonth, utcDate - 1));
+        return `${yesterday.getUTCFullYear()}-${yesterday.getUTCMonth()}-${yesterday.getUTCDate()}`;
+    }
+    // After 4 PM UTC, use today's date
+    return `${utcYear}-${utcMonth}-${utcDate}`;
+}
+
+// Reset at 4 PM UTC daily
+function checkDailyReset() {
+    const currentPeriod = getResetPeriodId();
+    const lastReset = localStorage.getItem('lastResetPeriod');
+    
+    if (lastReset !== currentPeriod) {
+        // New period, reset states
         if (statusRef) {
             statusRef.set({
                 partner1: { ready: false, timestamp: Date.now() },
@@ -163,15 +158,14 @@ function checkMidnightReset() {
         }
         state.partner1.ready = false;
         state.partner2.ready = false;
-        localStorage.setItem('lastReset', today);
+        localStorage.setItem('lastResetPeriod', currentPeriod);
         updateUI();
     }
 }
 
 // Initialize
-loadNames();
 setupFirebaseListeners();
-checkMidnightReset();
+checkDailyReset();
 updateUI();
 
 // Add some magic - floating hearts animation

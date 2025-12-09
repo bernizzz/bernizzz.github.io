@@ -149,13 +149,10 @@ function getNewPrompt() {
     return prompts[newIndex];
 }
 
-// Load saved names
+// Load fixed names
 function loadNames() {
-    const name1 = localStorage.getItem('partner1-name') || 'Partner 1';
-    const name2 = localStorage.getItem('partner2-name') || 'Partner 2';
-    
-    partner1NoteName.textContent = name1;
-    partner2NoteName.textContent = name2;
+    partner1NoteName.textContent = 'Arthur';
+    partner2NoteName.textContent = 'Bernice';
 }
 
 // Format timestamp
@@ -321,8 +318,8 @@ function loadHistory() {
             return;
         }
         
-        const name1 = localStorage.getItem('partner1-name') || 'Partner 1';
-        const name2 = localStorage.getItem('partner2-name') || 'Partner 2';
+        const name1 = 'Arthur';
+        const name2 = 'Bernice';
         
         // Sort by date descending
         const dates = Object.keys(data).sort().reverse();
