@@ -17,15 +17,15 @@
 }
 
 .points-card {
-    background: linear-gradient(145deg, #ffffff, #fff8f9);
-    border: 1px solid rgba(196, 69, 105, 0.15);
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+    border: 2px solid rgba(173, 20, 87, 0.15);
     border-radius: 16px;
     padding: 1.25rem 1.5rem;
     display: flex;
     align-items: center;
     gap: 1rem;
     min-width: 160px;
-    box-shadow: 0 4px 20px rgba(196, 69, 105, 0.08);
+    box-shadow: 0 4px 20px rgba(173, 20, 87, 0.1);
 }
 
 .points-avatar {
@@ -38,7 +38,8 @@
 
 .points-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
     color: var(--cream);
     margin-bottom: 0.25rem;
 }
@@ -46,7 +47,7 @@
 .points-value {
     font-family: 'Quicksand', sans-serif;
     font-size: 1.8rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--rose-light);
     line-height: 1;
 }
@@ -132,19 +133,20 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: linear-gradient(145deg, #ffffff, #fff8f9);
-    border: 1px solid rgba(196, 69, 105, 0.12);
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+    border: 2px solid rgba(173, 20, 87, 0.12);
     border-radius: 12px;
     padding: 0.85rem 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
 }
 
 .activity-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(196, 69, 105, 0.15);
-    border-color: rgba(196, 69, 105, 0.3);
+    box-shadow: 0 6px 20px rgba(173, 20, 87, 0.2);
+    border-color: rgba(173, 20, 87, 0.4);
 }
 
 .activity-btn:active {
@@ -162,7 +164,8 @@
 
 .activity-name {
     flex: 1;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--cream);
     text-align: left;
 }
@@ -311,10 +314,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(145deg, #ffffff, #fff8f9);
-    border: 1px solid rgba(196, 69, 105, 0.08);
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+    border: 1px solid rgba(173, 20, 87, 0.1);
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--cream);
     cursor: pointer;
     transition: all 0.2s ease;

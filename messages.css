@@ -35,20 +35,21 @@
 }
 
 .prompt-card {
-    background: linear-gradient(145deg, #ffffff, #fff8f9);
-    border: 1px solid rgba(196, 69, 105, 0.15);
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+    border: 2px solid rgba(173, 20, 87, 0.2);
     border-radius: 16px;
     padding: 1.5rem 2rem;
     position: relative;
     box-shadow: 
-        0 10px 40px rgba(196, 69, 105, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        0 10px 40px rgba(173, 20, 87, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .prompt-text {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-style: italic;
+    font-weight: 500;
     color: var(--cream);
     line-height: 1.6;
     margin: 0;
@@ -114,16 +115,16 @@
 
 /* Note Card */
 .note-card {
-    background: linear-gradient(145deg, #ffffff, #fff8f9);
-    border: 1px solid rgba(196, 69, 105, 0.15);
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+    border: 2px solid rgba(173, 20, 87, 0.15);
     border-radius: 16px;
     padding: 1.25rem;
     transition: all 0.3s ease;
 }
 
 .note-card:focus-within {
-    border-color: rgba(196, 69, 105, 0.35);
-    box-shadow: 0 0 30px rgba(196, 69, 105, 0.1);
+    border-color: rgba(173, 20, 87, 0.4);
+    box-shadow: 0 0 30px rgba(173, 20, 87, 0.15);
 }
 
 .note-input {
@@ -132,7 +133,8 @@
     background: transparent;
     border: none;
     font-family: 'Quicksand', sans-serif;
-    font-size: 1rem;
+    font-size: 1.05rem;
+    font-weight: 500;
     color: var(--cream);
     line-height: 1.7;
     resize: vertical;

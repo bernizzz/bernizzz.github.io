@@ -5,19 +5,20 @@
 }
 
 :root {
-    --bg-deep: #fff5f7;
-    --bg-mid: #ffe8ed;
-    --rose-dark: #d4627a;
-    --rose: #e8839b;
-    --rose-light: #c44569;
-    --gold: #c9a066;
-    --gold-light: #d4a574;
-    --cream: #4a3f4f;
-    --text-soft: #8b7b8e;
+    --bg-deep: #fce4ec;
+    --bg-mid: #f8bbd9;
+    --rose-dark: #ad1457;
+    --rose: #c2185b;
+    --rose-light: #d81b60;
+    --gold: #8d6e63;
+    --gold-light: #a1887f;
+    --cream: #3e2723;
+    --text-soft: #5d4037;
 }
 
 body {
     font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
     background: var(--bg-deep);
     min-height: 100vh;
     display: flex;
@@ -25,6 +26,8 @@ body {
     justify-content: center;
     overflow-x: hidden;
     color: var(--cream);
+    font-size: 16px;
+    line-height: 1.6;
 }
 
 /* Allow scrolling on pages with more content */
@@ -48,24 +51,24 @@ body.scrollable {
 
 .stars {
     background: 
-        radial-gradient(2px 2px at 20px 30px, #f8b4c4, transparent),
-        radial-gradient(2px 2px at 40px 70px, #e8839b, transparent),
-        radial-gradient(2.5px 2.5px at 50px 160px, #f8b4c4, transparent),
-        radial-gradient(2px 2px at 90px 40px, #f0c8a0, transparent),
-        radial-gradient(2.5px 2.5px at 130px 80px, #f8b4c4, transparent),
-        radial-gradient(2px 2px at 160px 120px, #e8839b, transparent),
-        radial-gradient(2px 2px at 200px 50px, #f8b4c4, transparent),
-        radial-gradient(2.5px 2.5px at 250px 180px, #f0c8a0, transparent),
-        radial-gradient(2px 2px at 300px 100px, #f8b4c4, transparent),
-        radial-gradient(2px 2px at 350px 60px, #e8839b, transparent),
-        radial-gradient(2.5px 2.5px at 400px 150px, #f8b4c4, transparent),
-        radial-gradient(2px 2px at 450px 30px, #f8b4c4, transparent),
-        radial-gradient(2px 2px at 500px 200px, #f0c8a0, transparent),
-        radial-gradient(2.5px 2.5px at 550px 90px, #f8b4c4, transparent),
-        radial-gradient(2px 2px at 600px 170px, #e8839b, transparent);
+        radial-gradient(3px 3px at 20px 30px, #f48fb1, transparent),
+        radial-gradient(3px 3px at 40px 70px, #f06292, transparent),
+        radial-gradient(4px 4px at 50px 160px, #f48fb1, transparent),
+        radial-gradient(3px 3px at 90px 40px, #ce93d8, transparent),
+        radial-gradient(4px 4px at 130px 80px, #f48fb1, transparent),
+        radial-gradient(3px 3px at 160px 120px, #f06292, transparent),
+        radial-gradient(3px 3px at 200px 50px, #f48fb1, transparent),
+        radial-gradient(4px 4px at 250px 180px, #ce93d8, transparent),
+        radial-gradient(3px 3px at 300px 100px, #f48fb1, transparent),
+        radial-gradient(3px 3px at 350px 60px, #f06292, transparent),
+        radial-gradient(4px 4px at 400px 150px, #f48fb1, transparent),
+        radial-gradient(3px 3px at 450px 30px, #f48fb1, transparent),
+        radial-gradient(3px 3px at 500px 200px, #ce93d8, transparent),
+        radial-gradient(4px 4px at 550px 90px, #f48fb1, transparent),
+        radial-gradient(3px 3px at 600px 170px, #f06292, transparent);
     background-repeat: repeat;
     background-size: 600px 200px;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .twinkling {
@@ -105,10 +108,10 @@ h1 {
 }
 
 .subtitle {
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: var(--text-soft);
-    font-weight: 400;
-    letter-spacing: 0.1em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     animation: fadeIn 1s ease-out 0.3s both;
 }
 
@@ -134,13 +137,13 @@ h1 {
     width: 120px;
     height: 120px;
     border: none;
-    background: linear-gradient(145deg, #ffffff, #ffe8ed);
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 
-        0 10px 40px rgba(196, 69, 105, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        0 10px 40px rgba(173, 20, 87, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .heart-btn:hover {
@@ -236,16 +239,17 @@ h1 {
 
 .partner-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: var(--cream);
     text-align: center;
     padding: 0.5rem 1rem;
 }
 
 .status {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-soft);
-    font-weight: 500;
+    font-weight: 600;
     text-transform: lowercase;
     letter-spacing: 0.05em;
     transition: all 0.3s ease;
@@ -254,6 +258,7 @@ h1 {
 
 .status.ready {
     color: var(--rose-light);
+    font-weight: 700;
 }
 
 /* Connection */
@@ -392,25 +397,27 @@ footer {
     display: inline-block;
     color: var(--rose-light);
     text-decoration: none;
-    font-size: 0.9rem;
-    padding: 0.5rem 1.25rem;
-    border: 1px solid rgba(196, 69, 105, 0.25);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border: 2px solid var(--rose);
     border-radius: 25px;
     transition: all 0.3s ease;
-    background: linear-gradient(145deg, #ffffff, #fff5f7);
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
 }
 
 .nav-link:hover {
-    border-color: var(--rose);
-    background: linear-gradient(145deg, #fff0f3, #ffe8ed);
+    border-color: var(--rose-dark);
+    background: linear-gradient(145deg, #fce4ec, #f8bbd9);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(196, 69, 105, 0.2);
+    box-shadow: 0 8px 25px rgba(173, 20, 87, 0.25);
 }
 
 .hint {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--text-soft);
-    opacity: 0.6;
+    font-weight: 500;
+    opacity: 0.8;
 }
 
 /* Animations */
