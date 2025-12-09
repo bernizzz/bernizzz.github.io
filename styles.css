@@ -380,15 +380,22 @@ footer {
     animation: fadeIn 1s ease-out 0.7s both;
 }
 
+.nav-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
 .nav-link {
     display: inline-block;
     color: var(--rose-light);
     text-decoration: none;
-    font-size: 0.95rem;
-    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.25rem;
     border: 1px solid rgba(196, 69, 105, 0.25);
     border-radius: 25px;
-    margin-bottom: 1.5rem;
     transition: all 0.3s ease;
     background: linear-gradient(145deg, #ffffff, #fff5f7);
 }

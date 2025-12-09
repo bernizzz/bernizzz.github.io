@@ -377,6 +377,11 @@
 /* Footer */
 footer {
     margin-top: 3rem;
+    text-align: center;
+}
+
+footer .nav-link {
+    margin-bottom: 1rem;
 }
 
 /* Responsive */

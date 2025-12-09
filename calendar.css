@@ -1,0 +1,556 @@
+/* Calendar Page Styles */
+
+.calendar-container {
+    max-width: 800px;
+    padding-bottom: 3rem;
+}
+
+/* Points Summary */
+.points-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    animation: fadeIn 0.8s ease-out 0.2s both;
+    flex-wrap: wrap;
+}
+
+.points-card {
+    background: linear-gradient(145deg, #ffffff, #fff8f9);
+    border: 1px solid rgba(196, 69, 105, 0.15);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 160px;
+    box-shadow: 0 4px 20px rgba(196, 69, 105, 0.08);
+}
+
+.points-avatar {
+    font-size: 2rem;
+}
+
+.points-info {
+    text-align: left;
+}
+
+.points-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 0.25rem;
+}
+
+.points-value {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--rose-light);
+    line-height: 1;
+}
+
+.points-label {
+    font-size: 0.7rem;
+    color: var(--text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.combined-points {
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.combined-heart {
+    font-size: 2rem;
+    animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+.combined-value {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--rose-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.combined-label {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+@keyframes gentle-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Section Titles */
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Activities Section */
+.activities-section {
+    margin-bottom: 2.5rem;
+    animation: fadeIn 0.8s ease-out 0.3s both;
+}
+
+.activities-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.activity-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.column-header {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--rose-light);
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(196, 69, 105, 0.15);
+    margin-bottom: 0.5rem;
+}
+
+.activity-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(145deg, #ffffff, #fff8f9);
+    border: 1px solid rgba(196, 69, 105, 0.12);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.activity-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(196, 69, 105, 0.15);
+    border-color: rgba(196, 69, 105, 0.3);
+}
+
+.activity-btn:active {
+    transform: scale(0.98);
+}
+
+.activity-btn.clicked {
+    background: linear-gradient(145deg, #fff0f3, #ffe8ed);
+    border-color: var(--rose);
+}
+
+.activity-icon {
+    font-size: 1.3rem;
+}
+
+.activity-name {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--cream);
+    text-align: left;
+}
+
+.activity-points {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--rose-light);
+    background: rgba(196, 69, 105, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+}
+
+/* Milestones */
+.milestones-section {
+    margin-bottom: 2.5rem;
+    animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+.milestones-track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(145deg, #ffffff, #fff8f9);
+    border: 1px solid rgba(196, 69, 105, 0.12);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.milestone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    z-index: 2;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+.milestone.achieved {
+    opacity: 1;
+}
+
+.milestone.achieved .milestone-icon {
+    transform: scale(1.2);
+    animation: bounce 0.5s ease;
+}
+
+.milestone-icon {
+    font-size: 1.8rem;
+    transition: transform 0.3s ease;
+}
+
+.milestone-points {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-soft);
+}
+
+.milestone-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(196, 69, 105, 0.1), rgba(196, 69, 105, 0.05));
+    border-radius: 16px;
+    z-index: 1;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1.2); }
+    50% { transform: scale(1.4); }
+}
+
+/* Calendar Section */
+.calendar-section {
+    margin-bottom: 2.5rem;
+    animation: fadeIn 0.8s ease-out 0.5s both;
+}
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.cal-nav-btn {
+    background: linear-gradient(145deg, #ffffff, #fff8f9);
+    border: 1px solid rgba(196, 69, 105, 0.15);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--rose-light);
+    transition: all 0.3s ease;
+}
+
+.cal-nav-btn:hover {
+    background: linear-gradient(145deg, #fff0f3, #ffe8ed);
+    border-color: var(--rose);
+}
+
+.cal-month-year {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--cream);
+    min-width: 180px;
+    text-align: center;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 2px;
+}
+
+.cal-header {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-soft);
+    padding: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #ffffff, #fff8f9);
+    border: 1px solid rgba(196, 69, 105, 0.08);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--cream);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.cal-day:hover {
+    border-color: rgba(196, 69, 105, 0.3);
+    transform: scale(1.05);
+}
+
+.cal-day.empty {
+    background: transparent;
+    border-color: transparent;
+    cursor: default;
+}
+
+.cal-day.empty:hover {
+    transform: none;
+}
+
+.cal-day.today {
+    border-color: var(--rose);
+    font-weight: 600;
+}
+
+.cal-day.today::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    background: var(--rose);
+    border-radius: 50%;
+}
+
+/* Check-in indicators */
+.cal-day .checkin-dots {
+    display: flex;
+    gap: 2px;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+.checkin-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.checkin-dot.arthur {
+    background: #6b9bd1;
+}
+
+.checkin-dot.bernice {
+    background: var(--rose);
+}
+
+.cal-day.both-ready {
+    background: linear-gradient(145deg, #fff0f3, #ffe8ed);
+    border-color: var(--rose);
+}
+
+.cal-day.both-ready .checkin-dots {
+    display: none;
+}
+
+.cal-day.both-ready::before {
+    content: '💕';
+    font-size: 0.7rem;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+/* Calendar Legend */
+.calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.legend-dot.both {
+    background: linear-gradient(135deg, var(--rose), var(--rose-light));
+}
+
+.legend-dot.arthur {
+    background: #6b9bd1;
+}
+
+.legend-dot.bernice {
+    background: var(--rose);
+}
+
+/* Activity Log */
+.activity-log-section {
+    animation: fadeIn 0.8s ease-out 0.6s both;
+}
+
+.activity-log {
+    background: linear-gradient(145deg, #ffffff, #fff8f9);
+    border: 1px solid rgba(196, 69, 105, 0.12);
+    border-radius: 16px;
+    padding: 1rem;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.activity-log::-webkit-scrollbar {
+    width: 6px;
+}
+
+.activity-log::-webkit-scrollbar-track {
+    background: rgba(196, 69, 105, 0.05);
+    border-radius: 3px;
+}
+
+.activity-log::-webkit-scrollbar-thumb {
+    background: rgba(196, 69, 105, 0.2);
+    border-radius: 3px;
+}
+
+.log-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(196, 69, 105, 0.08);
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-icon {
+    font-size: 1.2rem;
+}
+
+.log-text {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--cream);
+}
+
+.log-text strong {
+    color: var(--rose-light);
+}
+
+.log-points {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--rose-light);
+}
+
+.log-time {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+}
+
+.log-empty {
+    text-align: center;
+    color: var(--text-soft);
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* Points Animation */
+.points-popup {
+    position: fixed;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--rose-light);
+    pointer-events: none;
+    z-index: 100;
+    animation: points-float 1.5s ease-out forwards;
+}
+
+@keyframes points-float {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(1.2);
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .points-summary {
+        flex-direction: column;
+    }
+    
+    .points-card {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .combined-points {
+        order: -1;
+        padding: 1rem 0;
+    }
+    
+    .activities-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .milestones-track {
+        padding: 1rem;
+    }
+    
+    .milestone-icon {
+        font-size: 1.4rem;
+    }
+    
+    .cal-day {
+        font-size: 0.8rem;
+    }
+}
+
