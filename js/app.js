@@ -163,7 +163,24 @@ function checkDailyReset() {
     }
 }
 
+// Set today's date display
+function setTodayDate() {
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+        const today = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        const formattedDate = today.toLocaleDateString('en-US', options);
+        todayDateEl.textContent = formattedDate;
+    }
+}
+
 // Initialize
+setTodayDate();
 setupFirebaseListeners();
 checkDailyReset();
 updateUI();

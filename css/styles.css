@@ -115,6 +115,15 @@ h1 {
     animation: fadeIn 1s ease-out 0.3s both;
 }
 
+.date-display {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    font-weight: 500;
+    margin-top: 0.75rem;
+    opacity: 0.8;
+    animation: fadeIn 1s ease-out 0.5s both;
+}
+
 .hearts-container {
     display: flex;
     align-items: center;
