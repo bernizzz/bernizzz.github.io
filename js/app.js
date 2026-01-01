@@ -115,6 +115,8 @@ function showMessageBubble(partner) {
     const bubble = partner === 'partner1' ? partner1MessageBubble : partner2MessageBubble;
     const section = partner === 'partner1' ? partner1Section : partner2Section;
     
+    if (!bubble || !section) return;
+    
     // Position bubble relative to the section
     const rect = section.getBoundingClientRect();
     if (partner === 'partner1') {
@@ -127,6 +129,7 @@ function showMessageBubble(partner) {
     
     bubble.classList.add('visible');
 }
+
 
 // Hide message bubble
 function hideMessageBubble(partner) {
@@ -146,8 +149,8 @@ function displayMessage(partner) {
     messageModalBody.textContent = message;
     messageModal.classList.add('active');
     
-    // Hide bubble after viewing
-    hideMessageBubble(partner);
+    // Don't hide bubble - keep it visible so user can view message again
+    // hideMessageBubble(partner);
 }
 
 // Load and display messages from the other partner
@@ -160,13 +163,15 @@ function updateMessages() {
         partner2CharCount.textContent = `${state.partner2.message.length}/200`;
     }
     
-    // Show bubbles if there are sent messages
-    if (state.partner2.sentMessage) {
-        showMessageBubble('partner1');
-    }
-    if (state.partner1.sentMessage) {
-        showMessageBubble('partner2');
-    }
+    // Show bubbles if there are sent messages (with delay to ensure proper positioning)
+    setTimeout(() => {
+        if (state.partner2.sentMessage) {
+            showMessageBubble('partner1');
+        }
+        if (state.partner1.sentMessage) {
+            showMessageBubble('partner2');
+        }
+    }, 100);
 }
 
 // Event listeners for messages
@@ -327,6 +332,7 @@ function setupFirebaseListeners() {
             updateMessages();
         }
     });
+    
 }
 
 // Event Listeners
@@ -419,13 +425,15 @@ function recordCall() {
         callsRef.child(today).once('value', (snapshot) => {
             if (snapshot.exists()) {
                 // Already recorded today - button already red
+                console.log('Call already recorded for today');
                 return;
             }
             
-            // Record the call
+            // Record the call (save as true to match calendar expectations)
             callsRef.child(today).set(true).then(() => {
                 console.log('Call recorded for', today);
                 // Button already red from above
+                // The calendar page will automatically update via its Firebase listener
             }).catch((error) => {
                 console.error('Error recording call:', error);
                 // Remove red state if error
@@ -511,6 +519,16 @@ checkCallRecordedToday();
 // Initialize send buttons
 updateCharCount('partner1');
 updateCharCount('partner2');
+
+// Update message bubbles on window resize
+window.addEventListener('resize', () => {
+    setTimeout(updateMessages, 100);
+});
+
+// Also update bubbles after a short delay to ensure proper positioning
+setTimeout(() => {
+    updateMessages();
+}, 500);
 
 // Add some magic - floating hearts animation
 function createFloatingHeart() {

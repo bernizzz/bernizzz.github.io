@@ -121,7 +121,9 @@ function renderCalendar() {
     // Days of the month
     for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const called = calls[dateStr] || false;
+        // Check if call exists (could be true or an object)
+        const callData = calls[dateStr];
+        const called = callData === true || (callData && (callData.recorded === true || callData === true));
         
         const isToday = today.getFullYear() === year && 
                         today.getMonth() === month && 
