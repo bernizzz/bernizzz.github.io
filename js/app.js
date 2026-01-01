@@ -31,13 +31,15 @@ try {
 
 // State
 const state = {
-    partner1: { ready: false, name: 'Arthur' },
-    partner2: { ready: false, name: 'Bernice' }
+    partner1: { wantsToCallToday: false, readyToCallRn: false, name: 'Arthur' },
+    partner2: { wantsToCallToday: false, readyToCallRn: false, name: 'Bernice' }
 };
 
 // DOM Elements
-const partner1Btn = document.getElementById('partner1-btn');
-const partner2Btn = document.getElementById('partner2-btn');
+const partner1WantsTodayBtn = document.getElementById('partner1-wants-today-btn');
+const partner1ReadyRnBtn = document.getElementById('partner1-ready-rn-btn');
+const partner2WantsTodayBtn = document.getElementById('partner2-wants-today-btn');
+const partner2ReadyRnBtn = document.getElementById('partner2-ready-rn-btn');
 const partner1Status = document.getElementById('partner1-status');
 const partner2Status = document.getElementById('partner2-status');
 const celebration = document.getElementById('celebration');
@@ -50,32 +52,16 @@ localStorage.setItem('partner2-name', 'Bernice');
 // Update UI based on state
 function updateUI() {
     // Partner 1
-    if (state.partner1.ready) {
-        partner1Btn.classList.add('ready');
-        partner1Status.textContent = 'ready to call! 💕';
-        partner1Status.classList.add('ready');
-    } else {
-        partner1Btn.classList.remove('ready');
-        partner1Status.textContent = 'not ready yet';
-        partner1Status.classList.remove('ready');
-    }
+    updatePartnerUI('partner1', partner1WantsTodayBtn, partner1ReadyRnBtn, partner1Status);
     
     // Partner 2
-    if (state.partner2.ready) {
-        partner2Btn.classList.add('ready');
-        partner2Status.textContent = 'ready to call! 💕';
-        partner2Status.classList.add('ready');
-    } else {
-        partner2Btn.classList.remove('ready');
-        partner2Status.textContent = 'not ready yet';
-        partner2Status.classList.remove('ready');
-    }
+    updatePartnerUI('partner2', partner2WantsTodayBtn, partner2ReadyRnBtn, partner2Status);
     
-    // Connection pulse when both ready
-    if (state.partner1.ready && state.partner2.ready) {
+    // Connection pulse when both ready to call rn
+    if (state.partner1.readyToCallRn && state.partner2.readyToCallRn) {
         connectionPulse.classList.add('active');
         celebration.classList.add('active');
-    } else if (state.partner1.ready || state.partner2.ready) {
+    } else if (state.partner1.readyToCallRn || state.partner2.readyToCallRn) {
         connectionPulse.classList.add('active');
         celebration.classList.remove('active');
     } else {
@@ -84,15 +70,64 @@ function updateUI() {
     }
 }
 
-// Toggle ready state
-function toggleReady(partner) {
-    state[partner].ready = !state[partner].ready;
+// Helper function to update individual partner UI
+function updatePartnerUI(partner, wantsTodayBtn, readyRnBtn, statusEl) {
+    const partnerState = state[partner];
+    
+    // Update "wants to call today" button
+    if (partnerState.wantsToCallToday) {
+        wantsTodayBtn.classList.add('active');
+    } else {
+        wantsTodayBtn.classList.remove('active');
+    }
+    
+    // Update "ready to call rn" button
+    if (partnerState.readyToCallRn) {
+        readyRnBtn.classList.add('active');
+        statusEl.textContent = 'ready to call rn! 💕';
+        statusEl.classList.add('ready');
+    } else {
+        readyRnBtn.classList.remove('active');
+        if (partnerState.wantsToCallToday) {
+            statusEl.textContent = 'wants to call today';
+            statusEl.classList.remove('ready');
+        } else {
+            statusEl.textContent = 'not ready yet';
+            statusEl.classList.remove('ready');
+        }
+    }
+    
+    // Enable/disable "ready to call rn" button based on "wants to call today"
+    if (partnerState.wantsToCallToday) {
+        readyRnBtn.disabled = false;
+    } else {
+        readyRnBtn.disabled = true;
+        // If wantsToCallToday is false, also reset readyToCallRn
+        if (partnerState.readyToCallRn) {
+            partnerState.readyToCallRn = false;
+        }
+    }
+}
+
+// Toggle state based on action
+function toggleState(partner, action) {
+    if (action === 'wantsToday') {
+        state[partner].wantsToCallToday = !state[partner].wantsToCallToday;
+        // If unchecking "wants to call today", also uncheck "ready to call rn"
+        if (!state[partner].wantsToCallToday) {
+            state[partner].readyToCallRn = false;
+        }
+    } else if (action === 'readyRn') {
+        state[partner].readyToCallRn = !state[partner].readyToCallRn;
+    }
+    
     updateUI();
     
     // Sync to Firebase if configured
     if (statusRef) {
         statusRef.child(partner).set({
-            ready: state[partner].ready,
+            wantsToCallToday: state[partner].wantsToCallToday,
+            readyToCallRn: state[partner].readyToCallRn,
             timestamp: Date.now()
         });
     }
@@ -106,10 +141,12 @@ function setupFirebaseListeners() {
         const data = snapshot.val();
         if (data) {
             if (data.partner1) {
-                state.partner1.ready = data.partner1.ready || false;
+                state.partner1.wantsToCallToday = data.partner1.wantsToCallToday || false;
+                state.partner1.readyToCallRn = data.partner1.readyToCallRn || false;
             }
             if (data.partner2) {
-                state.partner2.ready = data.partner2.ready || false;
+                state.partner2.wantsToCallToday = data.partner2.wantsToCallToday || false;
+                state.partner2.readyToCallRn = data.partner2.readyToCallRn || false;
             }
             updateUI();
         }
@@ -117,8 +154,10 @@ function setupFirebaseListeners() {
 }
 
 // Event Listeners
-partner1Btn.addEventListener('click', () => toggleReady('partner1'));
-partner2Btn.addEventListener('click', () => toggleReady('partner2'));
+partner1WantsTodayBtn.addEventListener('click', () => toggleState('partner1', 'wantsToday'));
+partner1ReadyRnBtn.addEventListener('click', () => toggleState('partner1', 'readyRn'));
+partner2WantsTodayBtn.addEventListener('click', () => toggleState('partner2', 'wantsToday'));
+partner2ReadyRnBtn.addEventListener('click', () => toggleState('partner2', 'readyRn'));
 
 // Close celebration when clicked
 celebration.addEventListener('click', () => {
@@ -152,12 +191,14 @@ function checkDailyReset() {
         // New period, reset states
         if (statusRef) {
             statusRef.set({
-                partner1: { ready: false, timestamp: Date.now() },
-                partner2: { ready: false, timestamp: Date.now() }
+                partner1: { wantsToCallToday: false, readyToCallRn: false, timestamp: Date.now() },
+                partner2: { wantsToCallToday: false, readyToCallRn: false, timestamp: Date.now() }
             });
         }
-        state.partner1.ready = false;
-        state.partner2.ready = false;
+        state.partner1.wantsToCallToday = false;
+        state.partner1.readyToCallRn = false;
+        state.partner2.wantsToCallToday = false;
+        state.partner2.readyToCallRn = false;
         localStorage.setItem('lastResetPeriod', currentPeriod);
         updateUI();
     }
