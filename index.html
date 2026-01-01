@@ -28,13 +28,21 @@
                         <div class="received-message-label">from Bernice:</div>
                         <div class="received-message-text" id="partner1-received-text"></div>
                     </div>
-                    <textarea 
-                        class="message-input" 
-                        id="partner1-message" 
-                        placeholder="leave a message for Bernice..."
-                        maxlength="200"
-                        rows="2"
-                    ></textarea>
+                    <div class="message-input-wrapper">
+                        <textarea 
+                            class="message-input" 
+                            id="partner1-message" 
+                            placeholder="leave a message for Bernice..."
+                            maxlength="200"
+                            rows="2"
+                        ></textarea>
+                        <button class="send-message-btn" id="partner1-send-btn" data-partner="partner1" title="Send message">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="message-char-count" id="partner1-char-count">0/200</div>
                 </div>
                 <div class="buttons-container">
@@ -63,6 +71,27 @@
                 </div>
             </div>
 
+            <!-- Floating Message Bubbles -->
+            <div class="message-bubble" id="partner1-message-bubble" data-partner="partner1">
+                <div class="bubble-content">💌</div>
+                <div class="bubble-shine"></div>
+            </div>
+            <div class="message-bubble" id="partner2-message-bubble" data-partner="partner2">
+                <div class="bubble-content">💌</div>
+                <div class="bubble-shine"></div>
+            </div>
+
+            <!-- Message Modal -->
+            <div class="message-modal" id="message-modal">
+                <div class="message-modal-content">
+                    <button class="message-modal-close">&times;</button>
+                    <div class="message-modal-header">
+                        <span class="message-modal-from" id="message-modal-from"></span>
+                    </div>
+                    <div class="message-modal-body" id="message-modal-body"></div>
+                </div>
+            </div>
+
             <!-- Bernice -->
             <div class="heart-section" id="partner2-section">
                 <div class="message-container">
@@ -70,13 +99,21 @@
                         <div class="received-message-label">from Arthur:</div>
                         <div class="received-message-text" id="partner2-received-text"></div>
                     </div>
-                    <textarea 
-                        class="message-input" 
-                        id="partner2-message" 
-                        placeholder="leave a message for Arthur..."
-                        maxlength="200"
-                        rows="2"
-                    ></textarea>
+                    <div class="message-input-wrapper">
+                        <textarea 
+                            class="message-input" 
+                            id="partner2-message" 
+                            placeholder="leave a message for Arthur..."
+                            maxlength="200"
+                            rows="2"
+                        ></textarea>
+                        <button class="send-message-btn" id="partner2-send-btn" data-partner="partner2" title="Send message">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="message-char-count" id="partner2-char-count">0/200</div>
                 </div>
                 <div class="buttons-container">

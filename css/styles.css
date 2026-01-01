@@ -133,6 +133,7 @@ h1 {
     animation: fadeIn 1s ease-out 0.5s both;
     max-width: 900px;
     margin: 0 auto;
+    position: relative;
 }
 
 .heart-section {
@@ -198,9 +199,23 @@ h1 {
     display: none;
 }
 
-.message-input {
+/* Hide received message area when using bubbles */
+.received-message {
+    display: none;
+}
+
+.message-input-wrapper {
+    position: relative;
     width: 100%;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.message-input {
+    flex: 1;
     padding: 0.7rem;
+    padding-right: 2.5rem;
     border: 2px solid var(--rose);
     border-radius: 15px;
     background: linear-gradient(145deg, #ffffff, #fce4ec);
@@ -213,6 +228,47 @@ h1 {
     box-shadow: 
         0 4px 15px rgba(173, 20, 87, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.send-message-btn {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--rose-light), var(--rose));
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(196, 69, 105, 0.3);
+    z-index: 1;
+}
+
+.send-message-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(196, 69, 105, 0.4);
+}
+
+.send-message-btn:active {
+    transform: scale(0.95);
+}
+
+.send-message-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.send-message-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: white;
+    fill: none;
 }
 
 .message-input:focus {
@@ -234,6 +290,182 @@ h1 {
     text-align: right;
     opacity: 0.7;
     padding-right: 0.3rem;
+}
+
+/* Message Bubbles */
+.message-bubble {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(255, 182, 193, 0.9), rgba(255, 105, 180, 0.9));
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 50;
+    box-shadow: 
+        0 0 20px rgba(255, 182, 193, 0.6),
+        0 0 40px rgba(255, 105, 180, 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.3);
+    animation: bubble-float 3s ease-in-out infinite, bubble-shine 2s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.message-bubble.visible {
+    display: flex;
+}
+
+.message-bubble:hover {
+    transform: scale(1.1);
+}
+
+.message-bubble#partner1-message-bubble {
+    top: 15%;
+    right: 5%;
+}
+
+.message-bubble#partner2-message-bubble {
+    top: 15%;
+    left: 5%;
+}
+
+@media (max-width: 600px) {
+    .message-bubble#partner1-message-bubble {
+        top: 10%;
+        right: 2%;
+    }
+    
+    .message-bubble#partner2-message-bubble {
+        top: 10%;
+        left: 2%;
+    }
+}
+
+.bubble-content {
+    font-size: 1.5rem;
+    z-index: 1;
+}
+
+.bubble-shine {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+    animation: shine-rotate 3s linear infinite;
+}
+
+@keyframes bubble-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes bubble-shine {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(255, 182, 193, 0.6),
+            0 0 40px rgba(255, 105, 180, 0.4),
+            inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(255, 182, 193, 0.8),
+            0 0 60px rgba(255, 105, 180, 0.6),
+            inset 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+}
+
+@keyframes shine-rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Message Modal */
+.message-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.message-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.message-modal-content {
+    background: linear-gradient(145deg, #ffffff, #fff5f7);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    box-shadow: 
+        0 25px 80px rgba(196, 69, 105, 0.3),
+        0 0 100px rgba(196, 69, 105, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.message-modal.active .message-modal-content {
+    transform: scale(1);
+}
+
+.message-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    color: var(--rose-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.message-modal-close:hover {
+    transform: scale(1.2);
+}
+
+.message-modal-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(196, 69, 105, 0.2);
+}
+
+.message-modal-from {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--rose-light);
+}
+
+.message-modal-body {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;
+    color: var(--cream);
+    line-height: 1.6;
+    padding: 1rem 0;
 }
 
 .buttons-container {

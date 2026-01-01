@@ -50,6 +50,14 @@ const partner1CharCount = document.getElementById('partner1-char-count');
 const partner2CharCount = document.getElementById('partner2-char-count');
 const partner1ReceivedText = document.getElementById('partner1-received-text');
 const partner2ReceivedText = document.getElementById('partner2-received-text');
+const partner1SendBtn = document.getElementById('partner1-send-btn');
+const partner2SendBtn = document.getElementById('partner2-send-btn');
+const partner1MessageBubble = document.getElementById('partner1-message-bubble');
+const partner2MessageBubble = document.getElementById('partner2-message-bubble');
+const messageModal = document.getElementById('message-modal');
+const messageModalFrom = document.getElementById('message-modal-from');
+const messageModalBody = document.getElementById('message-modal-body');
+const messageModalClose = document.querySelector('.message-modal-close');
 const celebration = document.getElementById('celebration');
 const connectionPulse = document.getElementById('connection-pulse');
 
@@ -61,37 +69,86 @@ localStorage.setItem('partner2-name', 'Bernice');
 function updateCharCount(partner) {
     const messageEl = partner === 'partner1' ? partner1Message : partner2Message;
     const charCountEl = partner === 'partner1' ? partner1CharCount : partner2CharCount;
+    const sendBtn = partner === 'partner1' ? partner1SendBtn : partner2SendBtn;
     const length = messageEl.value.length;
     charCountEl.textContent = `${length}/200`;
     
-    // Update state
+    // Update state (draft message)
     state[partner].message = messageEl.value;
+    
+    // Enable/disable send button
+    sendBtn.disabled = length === 0;
+}
+
+// Send message
+function sendMessage(partner) {
+    const messageEl = partner === 'partner1' ? partner1Message : partner2Message;
+    const message = messageEl.value.trim();
+    
+    if (!message) return;
+    
+    // Update sent message in state
+    state[partner].sentMessage = message;
+    
+    // Clear the input
+    messageEl.value = '';
+    updateCharCount(partner);
     
     // Save to Firebase
     if (statusRef) {
         statusRef.child(partner).update({
-            message: state[partner].message,
-            messageTimestamp: Date.now()
+            sentMessage: state[partner].sentMessage,
+            sentMessageTimestamp: Date.now()
         });
     }
+    
+    // Show bubble on partner's side
+    const otherPartner = partner === 'partner1' ? 'partner2' : 'partner1';
+    showMessageBubble(otherPartner);
+}
+
+// Show message bubble on partner's side
+function showMessageBubble(partner) {
+    const bubble = partner === 'partner1' ? partner1MessageBubble : partner2MessageBubble;
+    const section = partner === 'partner1' ? partner1Section : partner2Section;
+    
+    // Position bubble relative to the section
+    const rect = section.getBoundingClientRect();
+    if (partner === 'partner1') {
+        bubble.style.top = `${rect.top + rect.height * 0.15}px`;
+        bubble.style.right = `${window.innerWidth - rect.right + 20}px`;
+    } else {
+        bubble.style.top = `${rect.top + rect.height * 0.15}px`;
+        bubble.style.left = `${rect.left + 20}px`;
+    }
+    
+    bubble.classList.add('visible');
+}
+
+// Hide message bubble
+function hideMessageBubble(partner) {
+    const bubble = partner === 'partner1' ? partner1MessageBubble : partner2MessageBubble;
+    bubble.classList.remove('visible');
+}
+
+// Display message in modal
+function displayMessage(partner) {
+    const otherPartner = partner === 'partner1' ? 'partner2' : 'partner1';
+    const message = state[otherPartner].sentMessage;
+    const name = state[otherPartner].name;
+    
+    if (!message) return;
+    
+    messageModalFrom.textContent = `from ${name}:`;
+    messageModalBody.textContent = message;
+    messageModal.classList.add('active');
+    
+    // Hide bubble after viewing
+    hideMessageBubble(partner);
 }
 
 // Load and display messages from the other partner
 function updateMessages() {
-    // Partner 1 sees Partner 2's message in the received message area
-    if (state.partner2.message) {
-        partner1ReceivedText.textContent = state.partner2.message;
-    } else {
-        partner1ReceivedText.textContent = '';
-    }
-    
-    // Partner 2 sees Partner 1's message in the received message area
-    if (state.partner1.message) {
-        partner2ReceivedText.textContent = state.partner1.message;
-    } else {
-        partner2ReceivedText.textContent = '';
-    }
-    
     // Update character counts based on current state
     if (state.partner1.message !== undefined) {
         partner1CharCount.textContent = `${state.partner1.message.length}/200`;
@@ -99,11 +156,49 @@ function updateMessages() {
     if (state.partner2.message !== undefined) {
         partner2CharCount.textContent = `${state.partner2.message.length}/200`;
     }
+    
+    // Show bubbles if there are sent messages
+    if (state.partner2.sentMessage) {
+        showMessageBubble('partner1');
+    }
+    if (state.partner1.sentMessage) {
+        showMessageBubble('partner2');
+    }
 }
 
 // Event listeners for messages
 partner1Message.addEventListener('input', () => updateCharCount('partner1'));
 partner2Message.addEventListener('input', () => updateCharCount('partner2'));
+partner1SendBtn.addEventListener('click', () => sendMessage('partner1'));
+partner2SendBtn.addEventListener('click', () => sendMessage('partner2'));
+
+// Allow Enter key to send (Shift+Enter for new line)
+partner1Message.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage('partner1');
+    }
+});
+partner2Message.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage('partner2');
+    }
+});
+
+// Message bubble click handlers
+partner1MessageBubble.addEventListener('click', () => displayMessage('partner1'));
+partner2MessageBubble.addEventListener('click', () => displayMessage('partner2'));
+
+// Modal close handlers
+messageModalClose.addEventListener('click', () => {
+    messageModal.classList.remove('active');
+});
+messageModal.addEventListener('click', (e) => {
+    if (e.target === messageModal) {
+        messageModal.classList.remove('active');
+    }
+});
 
 // Update UI based on state
 function updateUI() {
@@ -208,15 +303,21 @@ function setupFirebaseListeners() {
             if (data.partner1) {
                 state.partner1.wantsToCallToday = data.partner1.wantsToCallToday || false;
                 state.partner1.readyToCallRn = data.partner1.readyToCallRn || false;
-                if (data.partner1.message) {
-                    state.partner1.message = data.partner1.message;
+                if (data.partner1.message !== undefined) {
+                    state.partner1.message = data.partner1.message || '';
+                }
+                if (data.partner1.sentMessage) {
+                    state.partner1.sentMessage = data.partner1.sentMessage;
                 }
             }
             if (data.partner2) {
                 state.partner2.wantsToCallToday = data.partner2.wantsToCallToday || false;
                 state.partner2.readyToCallRn = data.partner2.readyToCallRn || false;
-                if (data.partner2.message) {
-                    state.partner2.message = data.partner2.message;
+                if (data.partner2.message !== undefined) {
+                    state.partner2.message = data.partner2.message || '';
+                }
+                if (data.partner2.sentMessage) {
+                    state.partner2.sentMessage = data.partner2.sentMessage;
                 }
             }
             updateUI();
@@ -298,6 +399,10 @@ setupFirebaseListeners();
 checkDailyReset();
 updateUI();
 updateMessages();
+
+// Initialize send buttons
+updateCharCount('partner1');
+updateCharCount('partner2');
 
 // Add some magic - floating hearts animation
 function createFloatingHeart() {

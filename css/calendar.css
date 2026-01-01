@@ -5,90 +5,40 @@
     padding-bottom: 3rem;
 }
 
-/* Points Summary */
-.points-summary {
+/* Call Counter */
+.call-counter {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 1rem;
     margin-bottom: 2.5rem;
     animation: fadeIn 0.8s ease-out 0.2s both;
-    flex-wrap: wrap;
 }
 
-.points-card {
+.call-count-display {
     background: linear-gradient(145deg, #ffffff, #fce4ec);
     border: 2px solid rgba(173, 20, 87, 0.15);
-    border-radius: 16px;
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    min-width: 160px;
+    border-radius: 20px;
+    padding: 2rem 3rem;
+    text-align: center;
     box-shadow: 0 4px 20px rgba(173, 20, 87, 0.1);
 }
 
-.points-avatar {
-    font-size: 2rem;
-}
-
-.points-info {
-    text-align: left;
-}
-
-.points-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 0.25rem;
-}
-
-.points-value {
+.call-count-value {
     font-family: 'Quicksand', sans-serif;
-    font-size: 1.8rem;
+    font-size: 3rem;
     font-weight: 700;
-    color: var(--rose-light);
-    line-height: 1;
-}
-
-.points-label {
-    font-size: 0.7rem;
-    color: var(--text-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.combined-points {
-    text-align: center;
-    padding: 0 1rem;
-}
-
-.combined-heart {
-    font-size: 2rem;
-    animation: gentle-pulse 2s ease-in-out infinite;
-}
-
-.combined-value {
-    font-family: 'Quicksand', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 600;
     background: linear-gradient(135deg, var(--rose-light), var(--gold));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.5rem;
 }
 
-.combined-label {
-    font-size: 0.75rem;
+.call-count-label {
+    font-size: 0.9rem;
     color: var(--text-soft);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-}
-
-@keyframes gentle-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
 }
 
 /* Section Titles */
@@ -101,83 +51,6 @@
     margin-bottom: 1.5rem;
 }
 
-/* Activities Section */
-.activities-section {
-    margin-bottom: 2.5rem;
-    animation: fadeIn 0.8s ease-out 0.3s both;
-}
-
-.activities-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-}
-
-.activity-column {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.column-header {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    color: var(--rose-light);
-    text-align: center;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(196, 69, 105, 0.15);
-    margin-bottom: 0.5rem;
-}
-
-.activity-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: linear-gradient(145deg, #ffffff, #fce4ec);
-    border: 2px solid rgba(173, 20, 87, 0.12);
-    border-radius: 12px;
-    padding: 0.85rem 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 500;
-}
-
-.activity-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(173, 20, 87, 0.2);
-    border-color: rgba(173, 20, 87, 0.4);
-}
-
-.activity-btn:active {
-    transform: scale(0.98);
-}
-
-.activity-btn.clicked {
-    background: linear-gradient(145deg, #fff0f3, #ffe8ed);
-    border-color: var(--rose);
-}
-
-.activity-icon {
-    font-size: 1.3rem;
-}
-
-.activity-name {
-    flex: 1;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--cream);
-    text-align: left;
-}
-
-.activity-points {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--rose-light);
-    background: rgba(196, 69, 105, 0.1);
-    padding: 0.25rem 0.5rem;
-    border-radius: 8px;
-}
 
 /* Milestones */
 .milestones-section {
@@ -237,6 +110,7 @@
     z-index: 1;
     transition: width 0.5s ease;
     width: 0%;
+    max-width: calc(100% - 4rem);
 }
 
 @keyframes bounce {
@@ -355,36 +229,9 @@
     border-radius: 50%;
 }
 
-/* Check-in indicators */
-.cal-day .checkin-dots {
-    display: flex;
-    gap: 2px;
-    position: absolute;
-    top: 4px;
-    right: 4px;
-}
-
-.checkin-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-}
-
-.checkin-dot.arthur {
-    background: #6b9bd1;
-}
-
-.checkin-dot.bernice {
-    background: var(--rose);
-}
-
 .cal-day.both-ready {
     background: linear-gradient(145deg, #fff0f3, #ffe8ed);
     border-color: var(--rose);
-}
-
-.cal-day.both-ready .checkin-dots {
-    display: none;
 }
 
 .cal-day.both-ready::before {
@@ -422,127 +269,15 @@
     background: linear-gradient(135deg, var(--rose), var(--rose-light));
 }
 
-.legend-dot.arthur {
-    background: #6b9bd1;
-}
-
-.legend-dot.bernice {
-    background: var(--rose);
-}
-
-/* Activity Log */
-.activity-log-section {
-    animation: fadeIn 0.8s ease-out 0.6s both;
-}
-
-.activity-log {
-    background: linear-gradient(145deg, #ffffff, #fff8f9);
-    border: 1px solid rgba(196, 69, 105, 0.12);
-    border-radius: 16px;
-    padding: 1rem;
-    max-height: 250px;
-    overflow-y: auto;
-}
-
-.activity-log::-webkit-scrollbar {
-    width: 6px;
-}
-
-.activity-log::-webkit-scrollbar-track {
-    background: rgba(196, 69, 105, 0.05);
-    border-radius: 3px;
-}
-
-.activity-log::-webkit-scrollbar-thumb {
-    background: rgba(196, 69, 105, 0.2);
-    border-radius: 3px;
-}
-
-.log-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    border-bottom: 1px solid rgba(196, 69, 105, 0.08);
-}
-
-.log-item:last-child {
-    border-bottom: none;
-}
-
-.log-icon {
-    font-size: 1.2rem;
-}
-
-.log-text {
-    flex: 1;
-    font-size: 0.9rem;
-    color: var(--cream);
-}
-
-.log-text strong {
-    color: var(--rose-light);
-}
-
-.log-points {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--rose-light);
-}
-
-.log-time {
-    font-size: 0.75rem;
-    color: var(--text-soft);
-}
-
-.log-empty {
-    text-align: center;
-    color: var(--text-soft);
-    font-style: italic;
-    padding: 2rem;
-}
-
-/* Points Animation */
-.points-popup {
-    position: fixed;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--rose-light);
-    pointer-events: none;
-    z-index: 100;
-    animation: points-float 1.5s ease-out forwards;
-}
-
-@keyframes points-float {
-    0% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-60px) scale(1.2);
-    }
-}
 
 /* Responsive */
 @media (max-width: 600px) {
-    .points-summary {
-        flex-direction: column;
+    .call-count-display {
+        padding: 1.5rem 2rem;
     }
     
-    .points-card {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .combined-points {
-        order: -1;
-        padding: 1rem 0;
-    }
-    
-    .activities-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+    .call-count-value {
+        font-size: 2.5rem;
     }
     
     .milestones-track {

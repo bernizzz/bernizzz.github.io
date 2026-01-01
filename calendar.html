@@ -18,110 +18,14 @@
         <header>
             <a href="index.html" class="back-link">← back to hearts</a>
             <h1>Our Love Journey</h1>
-            <p class="subtitle">track our connection & earn love points</p>
+            <p class="subtitle">track our calls together</p>
         </header>
 
-        <!-- Love Points Summary -->
-        <div class="points-summary">
-            <div class="points-card arthur-points">
-                <div class="points-avatar">🧑</div>
-                <div class="points-info">
-                    <div class="points-name">Arthur</div>
-                    <div class="points-value" id="arthur-points">0</div>
-                    <div class="points-label">love points</div>
-                </div>
-            </div>
-            
-            <div class="combined-points">
-                <div class="combined-heart">💕</div>
-                <div class="combined-value" id="combined-points">0</div>
-                <div class="combined-label">together</div>
-            </div>
-            
-            <div class="points-card bernice-points">
-                <div class="points-avatar">👩</div>
-                <div class="points-info">
-                    <div class="points-name">Bernice</div>
-                    <div class="points-value" id="bernice-points">0</div>
-                    <div class="points-label">love points</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Activities Section -->
-        <div class="activities-section">
-            <h2 class="section-title">Earn Love Points</h2>
-            
-            <div class="activities-grid">
-                <!-- Arthur's Activities -->
-                <div class="activity-column">
-                    <div class="column-header">Arthur</div>
-                    
-                    <button class="activity-btn" data-person="arthur" data-activity="workout" data-points="10">
-                        <span class="activity-icon">💪</span>
-                        <span class="activity-name">Workout</span>
-                        <span class="activity-points">+10</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="arthur" data-activity="message" data-points="5">
-                        <span class="activity-icon">💌</span>
-                        <span class="activity-name">Sent Message</span>
-                        <span class="activity-points">+5</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="arthur" data-activity="call" data-points="15">
-                        <span class="activity-icon">📞</span>
-                        <span class="activity-name">Made Call</span>
-                        <span class="activity-points">+15</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="arthur" data-activity="surprise" data-points="20">
-                        <span class="activity-icon">🎁</span>
-                        <span class="activity-name">Sweet Surprise</span>
-                        <span class="activity-points">+20</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="arthur" data-activity="selfcare" data-points="8">
-                        <span class="activity-icon">🧘</span>
-                        <span class="activity-name">Self Care</span>
-                        <span class="activity-points">+8</span>
-                    </button>
-                </div>
-                
-                <!-- Bernice's Activities -->
-                <div class="activity-column">
-                    <div class="column-header">Bernice</div>
-                    
-                    <button class="activity-btn" data-person="bernice" data-activity="workout" data-points="10">
-                        <span class="activity-icon">💪</span>
-                        <span class="activity-name">Workout</span>
-                        <span class="activity-points">+10</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="bernice" data-activity="message" data-points="5">
-                        <span class="activity-icon">💌</span>
-                        <span class="activity-name">Sent Message</span>
-                        <span class="activity-points">+5</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="bernice" data-activity="call" data-points="15">
-                        <span class="activity-icon">📞</span>
-                        <span class="activity-name">Made Call</span>
-                        <span class="activity-points">+15</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="bernice" data-activity="surprise" data-points="20">
-                        <span class="activity-icon">🎁</span>
-                        <span class="activity-name">Sweet Surprise</span>
-                        <span class="activity-points">+20</span>
-                    </button>
-                    
-                    <button class="activity-btn" data-person="bernice" data-activity="selfcare" data-points="8">
-                        <span class="activity-icon">🧘</span>
-                        <span class="activity-name">Self Care</span>
-                        <span class="activity-points">+8</span>
-                    </button>
-                </div>
+        <!-- Call Counter -->
+        <div class="call-counter">
+            <div class="call-count-display">
+                <div class="call-count-value" id="total-calls">0</div>
+                <div class="call-count-label">calls together</div>
             </div>
         </div>
 
@@ -129,21 +33,13 @@
         <div class="milestones-section">
             <h2 class="section-title">Love Milestones</h2>
             <div class="milestones-track">
-                <div class="milestone" data-target="100">
+                <div class="milestone" data-target="10">
                     <div class="milestone-icon">🌸</div>
-                    <div class="milestone-points">100</div>
+                    <div class="milestone-points">10</div>
                 </div>
-                <div class="milestone" data-target="250">
+                <div class="milestone" data-target="25">
                     <div class="milestone-icon">💐</div>
-                    <div class="milestone-points">250</div>
-                </div>
-                <div class="milestone" data-target="500">
-                    <div class="milestone-icon">💎</div>
-                    <div class="milestone-points">500</div>
-                </div>
-                <div class="milestone" data-target="1000">
-                    <div class="milestone-icon">👑</div>
-                    <div class="milestone-points">1000</div>
+                    <div class="milestone-points">25</div>
                 </div>
                 <div class="milestone-progress" id="milestone-progress"></div>
             </div>
@@ -151,7 +47,7 @@
 
         <!-- Calendar Section -->
         <div class="calendar-section">
-            <h2 class="section-title">Heart Check-ins</h2>
+            <h2 class="section-title">Call History</h2>
             
             <div class="calendar-nav">
                 <button class="cal-nav-btn" id="prev-month">
@@ -182,29 +78,13 @@
             <div class="calendar-legend">
                 <div class="legend-item">
                     <span class="legend-dot both"></span>
-                    <span>Both ready</span>
+                    <span>Called today</span>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-dot arthur"></span>
-                    <span>Arthur ready</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot bernice"></span>
-                    <span>Bernice ready</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Activity Log -->
-        <div class="activity-log-section">
-            <h2 class="section-title">Recent Activity</h2>
-            <div class="activity-log" id="activity-log">
-                <!-- Activity items will be generated by JS -->
             </div>
         </div>
 
         <footer>
-            <p class="hint">tap activities to earn points • check-ins sync automatically</p>
+            <p class="hint">calls are recorded automatically when both are ready</p>
         </footer>
     </div>
 
