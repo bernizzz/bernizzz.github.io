@@ -780,8 +780,125 @@ h1 {
     font-size: 1.1rem;
 }
 
+/* Call Record Section */
+.call-record-section {
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0 2rem;
+    animation: fadeIn 1s ease-out 0.6s both;
+}
+
+.call-record-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(145deg, #ffb6c1, #ff91a4);
+    border: 2px solid #ff6b9d;
+    border-radius: 30px;
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 
+        0 8px 25px rgba(255, 107, 157, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.call-record-btn:hover:not(:disabled):not(.recorded) {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 12px 35px rgba(255, 107, 157, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.call-record-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.call-record-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.call-record-btn.recorded {
+    background: linear-gradient(145deg, #ff4757, #ee5a6f) !important;
+    border-color: #c44569 !important;
+    box-shadow: 
+        0 8px 25px rgba(255, 71, 87, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.call-record-btn.recorded::before,
+.call-record-btn.recorded::after {
+    content: '✨';
+    position: absolute;
+    font-size: 1.2rem;
+    pointer-events: none;
+    animation: sparkle-float 1.5s ease-out forwards;
+}
+
+.call-record-btn.recorded::before {
+    top: 20%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.call-record-btn.recorded::after {
+    top: 20%;
+    right: 15%;
+    animation-delay: 0.3s;
+}
+
+.call-record-icon {
+    font-size: 1.2rem;
+}
+
+.call-record-text {
+    letter-spacing: 0.05em;
+}
+
+@keyframes sparkle-float {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) scale(1.5) rotate(180deg);
+    }
+}
+
+.call-record-section {
+    position: relative;
+}
+
+.sparkle-particle {
+    position: fixed;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 1000;
+    animation: sparkle-particle 1.5s ease-out forwards;
+    transform-origin: center;
+}
+
+@keyframes sparkle-particle {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.8) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--sparkle-x, 0), var(--sparkle-y, -50px)) scale(1.5) rotate(360deg);
+    }
+}
+
 footer {
-    margin-top: 4rem;
+    margin-top: 2rem;
     animation: fadeIn 1s ease-out 0.7s both;
 }
 

@@ -65,25 +65,10 @@ function setupFirebaseListeners() {
 }
 
 // Sync calls from call-status (when both are ready to call rn)
+// Note: This is kept for backward compatibility, but calls are now primarily recorded via the "today we called!" button
 function syncCallsFromCallStatus() {
-    if (!db) return;
-    
-    const callStatusRef = db.ref('call-status');
-    callStatusRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
-        
-        const today = getTodayString();
-        
-        // Record call if both are ready to call rn (and haven't recorded today yet)
-        if (data.partner1?.readyToCallRn && data.partner2?.readyToCallRn) {
-            if (!calls[today]) {
-                if (callsRef) {
-                    callsRef.child(today).set(true);
-                }
-            }
-        }
-    });
+    // This function is kept but calls are now recorded via the button on the main page
+    // The button provides explicit user control over when to record a call
 }
 
 // Get today's date string

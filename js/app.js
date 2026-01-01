@@ -20,11 +20,13 @@ const firebaseConfig = {
 // Initialize Firebase
 let db = null;
 let statusRef = null;
+let callsRef = null;
 
 try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
     statusRef = db.ref('call-status');
+    callsRef = db.ref('calls');
 } catch (error) {
     console.log('Firebase not configured yet. Running in local mode.');
 }
@@ -58,6 +60,7 @@ const messageModal = document.getElementById('message-modal');
 const messageModalFrom = document.getElementById('message-modal-from');
 const messageModalBody = document.getElementById('message-modal-body');
 const messageModalClose = document.querySelector('.message-modal-close');
+const callRecordBtn = document.getElementById('call-record-btn');
 const celebration = document.getElementById('celebration');
 const connectionPulse = document.getElementById('connection-pulse');
 
@@ -355,17 +358,23 @@ function getResetPeriodId() {
     return `${utcYear}-${utcMonth}-${utcDate}`;
 }
 
-// Reset at 4 PM UTC daily
+// Reset at 4 PM UTC daily (only resets call status, not messages)
 function checkDailyReset() {
     const currentPeriod = getResetPeriodId();
     const lastReset = localStorage.getItem('lastResetPeriod');
     
     if (lastReset !== currentPeriod) {
-        // New period, reset states (but keep messages)
+        // New period, reset only call status (keep messages)
         if (statusRef) {
-            statusRef.update({
-                partner1: { wantsToCallToday: false, readyToCallRn: false, timestamp: Date.now() },
-                partner2: { wantsToCallToday: false, readyToCallRn: false, timestamp: Date.now() }
+            statusRef.child('partner1').update({
+                wantsToCallToday: false,
+                readyToCallRn: false,
+                timestamp: Date.now()
+            });
+            statusRef.child('partner2').update({
+                wantsToCallToday: false,
+                readyToCallRn: false,
+                timestamp: Date.now()
             });
         }
         state.partner1.wantsToCallToday = false;
@@ -393,12 +402,111 @@ function setTodayDate() {
     }
 }
 
+// Record call for today
+function recordCall() {
+    if (!callRecordBtn) return;
+    
+    const today = getTodayString();
+    
+    // Always show sparkles immediately for visual feedback
+    createSparkles();
+    
+    // Change button to red immediately for visual feedback
+    callRecordBtn.classList.add('recorded');
+    
+    // Check if already recorded today
+    if (callsRef) {
+        callsRef.child(today).once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // Already recorded today - button already red
+                return;
+            }
+            
+            // Record the call
+            callsRef.child(today).set(true).then(() => {
+                console.log('Call recorded for', today);
+                // Button already red from above
+            }).catch((error) => {
+                console.error('Error recording call:', error);
+                // Remove red state if error
+                callRecordBtn.classList.remove('recorded');
+            });
+        });
+    } else {
+        console.log('Firebase not available - running in local mode');
+    }
+}
+
+// Create sparkling particles animation
+function createSparkles() {
+    const rect = callRecordBtn.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Create multiple sparkle particles
+    for (let i = 0; i < 15; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle-particle';
+        sparkle.textContent = '✨';
+        
+        // Random angle and distance
+        const angle = (i / 15) * Math.PI * 2;
+        const distance = 50 + Math.random() * 50;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        
+        sparkle.style.left = `${centerX}px`;
+        sparkle.style.top = `${centerY}px`;
+        sparkle.style.setProperty('--sparkle-x', `${x}px`);
+        sparkle.style.setProperty('--sparkle-y', `${y}px`);
+        sparkle.style.animationDelay = `${i * 0.03}s`;
+        
+        document.body.appendChild(sparkle);
+        
+        // Remove after animation
+        setTimeout(() => {
+            if (sparkle.parentNode) {
+                sparkle.remove();
+            }
+        }, 2000);
+    }
+}
+
+// Get today's date string
+function getTodayString() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+}
+
+// Event listener for call record button
+if (callRecordBtn) {
+    callRecordBtn.addEventListener('click', recordCall);
+} else {
+    console.error('Call record button not found!');
+}
+
+// Check if call was already recorded today and update button state
+function checkCallRecordedToday() {
+    const today = getTodayString();
+    
+    if (callsRef) {
+        callsRef.child(today).once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                callRecordBtn.classList.add('recorded');
+            } else {
+                callRecordBtn.classList.remove('recorded');
+            }
+        });
+    }
+}
+
 // Initialize
 setTodayDate();
 setupFirebaseListeners();
 checkDailyReset();
 updateUI();
 updateMessages();
+checkCallRecordedToday();
 
 // Initialize send buttons
 updateCharCount('partner1');
