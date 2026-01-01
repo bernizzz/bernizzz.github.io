@@ -31,8 +31,8 @@ try {
 
 // State
 const state = {
-    partner1: { wantsToCallToday: false, readyToCallRn: false, name: 'Arthur' },
-    partner2: { wantsToCallToday: false, readyToCallRn: false, name: 'Bernice' }
+    partner1: { wantsToCallToday: false, readyToCallRn: false, name: 'Arthur', message: '' },
+    partner2: { wantsToCallToday: false, readyToCallRn: false, name: 'Bernice', message: '' }
 };
 
 // DOM Elements
@@ -42,12 +42,68 @@ const partner2WantsTodayBtn = document.getElementById('partner2-wants-today-btn'
 const partner2ReadyRnBtn = document.getElementById('partner2-ready-rn-btn');
 const partner1Status = document.getElementById('partner1-status');
 const partner2Status = document.getElementById('partner2-status');
+const partner1Section = document.getElementById('partner1-section');
+const partner2Section = document.getElementById('partner2-section');
+const partner1Message = document.getElementById('partner1-message');
+const partner2Message = document.getElementById('partner2-message');
+const partner1CharCount = document.getElementById('partner1-char-count');
+const partner2CharCount = document.getElementById('partner2-char-count');
+const partner1ReceivedText = document.getElementById('partner1-received-text');
+const partner2ReceivedText = document.getElementById('partner2-received-text');
 const celebration = document.getElementById('celebration');
 const connectionPulse = document.getElementById('connection-pulse');
 
-// Set fixed names in localStorage for messages page
+// Set fixed names in localStorage
 localStorage.setItem('partner1-name', 'Arthur');
 localStorage.setItem('partner2-name', 'Bernice');
+
+// Message handling
+function updateCharCount(partner) {
+    const messageEl = partner === 'partner1' ? partner1Message : partner2Message;
+    const charCountEl = partner === 'partner1' ? partner1CharCount : partner2CharCount;
+    const length = messageEl.value.length;
+    charCountEl.textContent = `${length}/200`;
+    
+    // Update state
+    state[partner].message = messageEl.value;
+    
+    // Save to Firebase
+    if (statusRef) {
+        statusRef.child(partner).update({
+            message: state[partner].message,
+            messageTimestamp: Date.now()
+        });
+    }
+}
+
+// Load and display messages from the other partner
+function updateMessages() {
+    // Partner 1 sees Partner 2's message in the received message area
+    if (state.partner2.message) {
+        partner1ReceivedText.textContent = state.partner2.message;
+    } else {
+        partner1ReceivedText.textContent = '';
+    }
+    
+    // Partner 2 sees Partner 1's message in the received message area
+    if (state.partner1.message) {
+        partner2ReceivedText.textContent = state.partner1.message;
+    } else {
+        partner2ReceivedText.textContent = '';
+    }
+    
+    // Update character counts based on current state
+    if (state.partner1.message !== undefined) {
+        partner1CharCount.textContent = `${state.partner1.message.length}/200`;
+    }
+    if (state.partner2.message !== undefined) {
+        partner2CharCount.textContent = `${state.partner2.message.length}/200`;
+    }
+}
+
+// Event listeners for messages
+partner1Message.addEventListener('input', () => updateCharCount('partner1'));
+partner2Message.addEventListener('input', () => updateCharCount('partner2'));
 
 // Update UI based on state
 function updateUI() {
@@ -73,6 +129,7 @@ function updateUI() {
 // Helper function to update individual partner UI
 function updatePartnerUI(partner, wantsTodayBtn, readyRnBtn, statusEl) {
     const partnerState = state[partner];
+    const sectionEl = partner === 'partner1' ? partner1Section : partner2Section;
     
     // Update "wants to call today" button
     if (partnerState.wantsToCallToday) {
@@ -95,6 +152,14 @@ function updatePartnerUI(partner, wantsTodayBtn, readyRnBtn, statusEl) {
             statusEl.textContent = 'not ready yet';
             statusEl.classList.remove('ready');
         }
+    }
+    
+    // Update background based on state
+    sectionEl.classList.remove('wants-today', 'ready-rn');
+    if (partnerState.readyToCallRn) {
+        sectionEl.classList.add('ready-rn');
+    } else if (partnerState.wantsToCallToday) {
+        sectionEl.classList.add('wants-today');
     }
     
     // Enable/disable "ready to call rn" button based on "wants to call today"
@@ -125,7 +190,7 @@ function toggleState(partner, action) {
     
     // Sync to Firebase if configured
     if (statusRef) {
-        statusRef.child(partner).set({
+        statusRef.child(partner).update({
             wantsToCallToday: state[partner].wantsToCallToday,
             readyToCallRn: state[partner].readyToCallRn,
             timestamp: Date.now()
@@ -143,12 +208,19 @@ function setupFirebaseListeners() {
             if (data.partner1) {
                 state.partner1.wantsToCallToday = data.partner1.wantsToCallToday || false;
                 state.partner1.readyToCallRn = data.partner1.readyToCallRn || false;
+                if (data.partner1.message) {
+                    state.partner1.message = data.partner1.message;
+                }
             }
             if (data.partner2) {
                 state.partner2.wantsToCallToday = data.partner2.wantsToCallToday || false;
                 state.partner2.readyToCallRn = data.partner2.readyToCallRn || false;
+                if (data.partner2.message) {
+                    state.partner2.message = data.partner2.message;
+                }
             }
             updateUI();
+            updateMessages();
         }
     });
 }
@@ -188,9 +260,9 @@ function checkDailyReset() {
     const lastReset = localStorage.getItem('lastResetPeriod');
     
     if (lastReset !== currentPeriod) {
-        // New period, reset states
+        // New period, reset states (but keep messages)
         if (statusRef) {
-            statusRef.set({
+            statusRef.update({
                 partner1: { wantsToCallToday: false, readyToCallRn: false, timestamp: Date.now() },
                 partner2: { wantsToCallToday: false, readyToCallRn: false, timestamp: Date.now() }
             });
@@ -225,6 +297,7 @@ setTodayDate();
 setupFirebaseListeners();
 checkDailyReset();
 updateUI();
+updateMessages();
 
 // Add some magic - floating hearts animation
 function createFloatingHeart() {
@@ -274,6 +347,3 @@ To enable real-time sync between devices:
 
 Without Firebase, the app works locally only.
 `);
-
-
-

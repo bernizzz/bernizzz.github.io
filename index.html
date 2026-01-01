@@ -23,11 +23,32 @@
         <div class="hearts-container">
             <!-- Arthur -->
             <div class="heart-section" id="partner1-section">
+                <div class="message-container">
+                    <div class="received-message" id="partner1-received-message">
+                        <div class="received-message-label">from Bernice:</div>
+                        <div class="received-message-text" id="partner1-received-text"></div>
+                    </div>
+                    <textarea 
+                        class="message-input" 
+                        id="partner1-message" 
+                        placeholder="leave a message for Bernice..."
+                        maxlength="200"
+                        rows="2"
+                    ></textarea>
+                    <div class="message-char-count" id="partner1-char-count">0/200</div>
+                </div>
                 <div class="buttons-container">
                     <button class="action-btn wants-today-btn" id="partner1-wants-today-btn" data-partner="partner1" data-action="wantsToday">
+                        <svg class="btn-icon sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 1v3M12 20v3M23 12h-3M4 12H1M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05l-2.12-2.12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                         <span class="btn-label">wants to call today</span>
                     </button>
                     <button class="action-btn ready-rn-btn" id="partner1-ready-rn-btn" data-partner="partner1" data-action="readyRn" disabled>
+                        <svg class="btn-icon heart-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
                         <span class="btn-label">ready to call rn</span>
                     </button>
                 </div>
@@ -40,16 +61,36 @@
                 <div class="connection-line">
                     <div class="connection-pulse" id="connection-pulse"></div>
                 </div>
-                <div class="distance-text">miles apart, hearts together</div>
             </div>
 
             <!-- Bernice -->
             <div class="heart-section" id="partner2-section">
+                <div class="message-container">
+                    <div class="received-message" id="partner2-received-message">
+                        <div class="received-message-label">from Arthur:</div>
+                        <div class="received-message-text" id="partner2-received-text"></div>
+                    </div>
+                    <textarea 
+                        class="message-input" 
+                        id="partner2-message" 
+                        placeholder="leave a message for Arthur..."
+                        maxlength="200"
+                        rows="2"
+                    ></textarea>
+                    <div class="message-char-count" id="partner2-char-count">0/200</div>
+                </div>
                 <div class="buttons-container">
                     <button class="action-btn wants-today-btn" id="partner2-wants-today-btn" data-partner="partner2" data-action="wantsToday">
+                        <svg class="btn-icon sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 1v3M12 20v3M23 12h-3M4 12H1M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05l-2.12-2.12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                         <span class="btn-label">wants to call today</span>
                     </button>
                     <button class="action-btn ready-rn-btn" id="partner2-ready-rn-btn" data-partner="partner2" data-action="readyRn" disabled>
+                        <svg class="btn-icon heart-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
                         <span class="btn-label">ready to call rn</span>
                     </button>
                 </div>
@@ -68,7 +109,6 @@
 
         <footer>
             <div class="nav-links">
-                <a href="messages.html" class="nav-link">💌 love notes</a>
                 <a href="calendar.html" class="nav-link">📅 our journey</a>
             </div>
             <p class="hint">click buttons to update status • resets daily at 4pm UTC</p>
