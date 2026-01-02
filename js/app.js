@@ -302,8 +302,15 @@ function toggleState(partner, action) {
 }
 
 // Listen for Firebase updates
+let firebaseDataLoaded = false;
+
 function setupFirebaseListeners() {
-    if (!statusRef) return;
+    if (!statusRef) {
+        // If Firebase not available, still update UI with current state
+        updateUI();
+        updateMessages();
+        return;
+    }
     
     statusRef.on('value', (snapshot) => {
         const data = snapshot.val();
@@ -328,11 +335,26 @@ function setupFirebaseListeners() {
                     state.partner2.sentMessage = data.partner2.sentMessage;
                 }
             }
+            
+            // Mark that Firebase data has been loaded
+            if (!firebaseDataLoaded) {
+                firebaseDataLoaded = true;
+                // Check for daily reset only after Firebase data is loaded
+                checkDailyReset();
+            }
+            
+            updateUI();
+            updateMessages();
+        } else {
+            // No data in Firebase yet - initialize with defaults
+            if (!firebaseDataLoaded) {
+                firebaseDataLoaded = true;
+                checkDailyReset();
+            }
             updateUI();
             updateMessages();
         }
     });
-    
 }
 
 // Event Listeners
@@ -510,11 +532,20 @@ function checkCallRecordedToday() {
 
 // Initialize
 setTodayDate();
-setupFirebaseListeners();
-checkDailyReset();
-updateUI();
-updateMessages();
+setupFirebaseListeners(); // This will call checkDailyReset after Firebase data loads
+updateUI(); // Initial UI update (will be updated again when Firebase loads)
+updateMessages(); // Initial messages update
 checkCallRecordedToday();
+
+// Fallback: if Firebase doesn't load within 2 seconds, still check reset
+setTimeout(() => {
+    if (!firebaseDataLoaded) {
+        firebaseDataLoaded = true;
+        checkDailyReset();
+        updateUI();
+        updateMessages();
+    }
+}, 2000);
 
 // Initialize send buttons
 updateCharCount('partner1');
