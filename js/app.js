@@ -33,8 +33,8 @@ try {
 
 // State
 const state = {
-    partner1: { wantsToCallToday: false, readyToCallRn: false, name: 'Arthur', message: '' },
-    partner2: { wantsToCallToday: false, readyToCallRn: false, name: 'Bernice', message: '' }
+    partner1: { wantsToCallToday: false, readyToCallRn: false, name: 'Arthur', message: '', cantCallReason: '' },
+    partner2: { wantsToCallToday: false, readyToCallRn: false, name: 'Bernice', message: '', cantCallReason: '' }
 };
 
 // DOM Elements
@@ -54,15 +54,25 @@ const partner1ReceivedText = document.getElementById('partner1-received-text');
 const partner2ReceivedText = document.getElementById('partner2-received-text');
 const partner1SendBtn = document.getElementById('partner1-send-btn');
 const partner2SendBtn = document.getElementById('partner2-send-btn');
-const partner1MessageBubble = document.getElementById('partner1-message-bubble');
-const partner2MessageBubble = document.getElementById('partner2-message-bubble');
-const messageModal = document.getElementById('message-modal');
-const messageModalFrom = document.getElementById('message-modal-from');
-const messageModalBody = document.getElementById('message-modal-body');
-const messageModalClose = document.querySelector('.message-modal-close');
+const partner1ReceivedMessage = document.getElementById('partner1-received-message');
+const partner2ReceivedMessage = document.getElementById('partner2-received-message');
 const callRecordBtn = document.getElementById('call-record-btn');
 const celebration = document.getElementById('celebration');
 const connectionPulse = document.getElementById('connection-pulse');
+const partner1CantCallBtn = document.getElementById('partner1-cant-call-btn');
+const partner2CantCallBtn = document.getElementById('partner2-cant-call-btn');
+const partner1CantCallContainer = document.getElementById('partner1-cant-call-reason-container');
+const partner2CantCallContainer = document.getElementById('partner2-cant-call-reason-container');
+const partner1CantCallReason = document.getElementById('partner1-cant-call-reason');
+const partner2CantCallReason = document.getElementById('partner2-cant-call-reason');
+const partner1CantCallSubmit = document.getElementById('partner1-cant-call-submit');
+const partner2CantCallSubmit = document.getElementById('partner2-cant-call-submit');
+const partner1CantCallCancel = document.getElementById('partner1-cant-call-cancel');
+const partner2CantCallCancel = document.getElementById('partner2-cant-call-cancel');
+const partner1ReceivedCantCall = document.getElementById('partner1-received-cant-call');
+const partner2ReceivedCantCall = document.getElementById('partner2-received-cant-call');
+const partner1ReceivedCantCallText = document.getElementById('partner1-received-cant-call-text');
+const partner2ReceivedCantCallText = document.getElementById('partner2-received-cant-call-text');
 
 // Set fixed names in localStorage
 localStorage.setItem('partner1-name', 'Arthur');
@@ -105,52 +115,24 @@ function sendMessage(partner) {
         });
     }
     
-    // Show bubble on partner's side
+    // Update message display on partner's side
     const otherPartner = partner === 'partner1' ? 'partner2' : 'partner1';
-    showMessageBubble(otherPartner);
+    updateMessageDisplay(otherPartner);
 }
 
-// Show message bubble on partner's side
-function showMessageBubble(partner) {
-    const bubble = partner === 'partner1' ? partner1MessageBubble : partner2MessageBubble;
-    const section = partner === 'partner1' ? partner1Section : partner2Section;
-    
-    if (!bubble || !section) return;
-    
-    // Position bubble relative to the section
-    const rect = section.getBoundingClientRect();
-    if (partner === 'partner1') {
-        bubble.style.top = `${rect.top + rect.height * 0.15}px`;
-        bubble.style.right = `${window.innerWidth - rect.right + 20}px`;
-    } else {
-        bubble.style.top = `${rect.top + rect.height * 0.15}px`;
-        bubble.style.left = `${rect.left + 20}px`;
-    }
-    
-    bubble.classList.add('visible');
-}
-
-
-// Hide message bubble
-function hideMessageBubble(partner) {
-    const bubble = partner === 'partner1' ? partner1MessageBubble : partner2MessageBubble;
-    bubble.classList.remove('visible');
-}
-
-// Display message in modal
-function displayMessage(partner) {
+// Update message display in styled message box
+function updateMessageDisplay(partner) {
     const otherPartner = partner === 'partner1' ? 'partner2' : 'partner1';
     const message = state[otherPartner].sentMessage;
-    const name = state[otherPartner].name;
+    const receivedMessageEl = partner === 'partner1' ? partner1ReceivedMessage : partner2ReceivedMessage;
+    const receivedTextEl = partner === 'partner1' ? partner1ReceivedText : partner2ReceivedText;
     
-    if (!message) return;
-    
-    messageModalFrom.textContent = `from ${name}:`;
-    messageModalBody.textContent = message;
-    messageModal.classList.add('active');
-    
-    // Don't hide bubble - keep it visible so user can view message again
-    // hideMessageBubble(partner);
+    if (message) {
+        receivedTextEl.textContent = message;
+        receivedMessageEl.style.display = 'block';
+    } else {
+        receivedMessageEl.style.display = 'none';
+    }
 }
 
 // Load and display messages from the other partner
@@ -163,15 +145,9 @@ function updateMessages() {
         partner2CharCount.textContent = `${state.partner2.message.length}/200`;
     }
     
-    // Show bubbles if there are sent messages (with delay to ensure proper positioning)
-    setTimeout(() => {
-        if (state.partner2.sentMessage) {
-            showMessageBubble('partner1');
-        }
-        if (state.partner1.sentMessage) {
-            showMessageBubble('partner2');
-        }
-    }, 100);
+    // Update message displays
+    updateMessageDisplay('partner1');
+    updateMessageDisplay('partner2');
 }
 
 // Event listeners for messages
@@ -194,19 +170,6 @@ partner2Message.addEventListener('keydown', (e) => {
     }
 });
 
-// Message bubble click handlers
-partner1MessageBubble.addEventListener('click', () => displayMessage('partner1'));
-partner2MessageBubble.addEventListener('click', () => displayMessage('partner2'));
-
-// Modal close handlers
-messageModalClose.addEventListener('click', () => {
-    messageModal.classList.remove('active');
-});
-messageModal.addEventListener('click', (e) => {
-    if (e.target === messageModal) {
-        messageModal.classList.remove('active');
-    }
-});
 
 // Update UI based on state
 function updateUI() {
@@ -301,6 +264,75 @@ function toggleState(partner, action) {
     }
 }
 
+// Show can't call reason input
+function showCantCallReason(partner) {
+    const container = partner === 'partner1' ? partner1CantCallContainer : partner2CantCallContainer;
+    const reasonInput = partner === 'partner1' ? partner1CantCallReason : partner2CantCallReason;
+    const btn = partner === 'partner1' ? partner1CantCallBtn : partner2CantCallBtn;
+    
+    container.style.display = 'block';
+    reasonInput.focus();
+    btn.classList.add('active');
+}
+
+// Hide can't call reason input
+function hideCantCallReason(partner) {
+    const container = partner === 'partner1' ? partner1CantCallContainer : partner2CantCallContainer;
+    const reasonInput = partner === 'partner1' ? partner1CantCallReason : partner2CantCallReason;
+    const btn = partner === 'partner1' ? partner1CantCallBtn : partner2CantCallBtn;
+    
+    container.style.display = 'none';
+    reasonInput.value = '';
+    btn.classList.remove('active');
+}
+
+// Submit can't call reason
+function submitCantCallReason(partner) {
+    const reasonInput = partner === 'partner1' ? partner1CantCallReason : partner2CantCallReason;
+    const reason = reasonInput.value.trim();
+    
+    if (!reason) {
+        alert('Please explain why you can\'t call today.');
+        return;
+    }
+    
+    // Update state
+    state[partner].cantCallReason = reason;
+    
+    // Save to Firebase
+    if (statusRef) {
+        statusRef.child(partner).update({
+            cantCallReason: reason,
+            timestamp: Date.now()
+        });
+    }
+    
+    // Hide the input container
+    hideCantCallReason(partner);
+    
+    // Update UI to show the reason on the other partner's side
+    updateCantCallReasons();
+}
+
+// Update displayed can't call reasons
+function updateCantCallReasons() {
+    // Show partner2's reason on partner1's side
+    if (state.partner2.cantCallReason) {
+        partner1ReceivedCantCall.style.display = 'block';
+        partner1ReceivedCantCallText.textContent = state.partner2.cantCallReason;
+    } else {
+        partner1ReceivedCantCall.style.display = 'none';
+    }
+    
+    // Show partner1's reason on partner2's side
+    if (state.partner1.cantCallReason) {
+        partner2ReceivedCantCall.style.display = 'block';
+        partner2ReceivedCantCallText.textContent = state.partner1.cantCallReason;
+    } else {
+        partner2ReceivedCantCall.style.display = 'none';
+    }
+}
+
 // Listen for Firebase updates
 let firebaseDataLoaded = false;
 
@@ -324,6 +356,11 @@ function setupFirebaseListeners() {
                 if (data.partner1.sentMessage) {
                     state.partner1.sentMessage = data.partner1.sentMessage;
                 }
+                if (data.partner1.cantCallReason) {
+                    state.partner1.cantCallReason = data.partner1.cantCallReason;
+                } else {
+                    state.partner1.cantCallReason = '';
+                }
             }
             if (data.partner2) {
                 state.partner2.wantsToCallToday = data.partner2.wantsToCallToday || false;
@@ -333,6 +370,11 @@ function setupFirebaseListeners() {
                 }
                 if (data.partner2.sentMessage) {
                     state.partner2.sentMessage = data.partner2.sentMessage;
+                }
+                if (data.partner2.cantCallReason) {
+                    state.partner2.cantCallReason = data.partner2.cantCallReason;
+                } else {
+                    state.partner2.cantCallReason = '';
                 }
             }
             
@@ -345,6 +387,7 @@ function setupFirebaseListeners() {
             
             updateUI();
             updateMessages();
+            updateCantCallReasons();
         } else {
             // No data in Firebase yet - initialize with defaults
             if (!firebaseDataLoaded) {
@@ -353,6 +396,7 @@ function setupFirebaseListeners() {
             }
             updateUI();
             updateMessages();
+            updateCantCallReasons();
         }
     });
 }
@@ -362,6 +406,16 @@ partner1WantsTodayBtn.addEventListener('click', () => toggleState('partner1', 'w
 partner1ReadyRnBtn.addEventListener('click', () => toggleState('partner1', 'readyRn'));
 partner2WantsTodayBtn.addEventListener('click', () => toggleState('partner2', 'wantsToday'));
 partner2ReadyRnBtn.addEventListener('click', () => toggleState('partner2', 'readyRn'));
+
+// Can't call today button handlers
+partner1CantCallBtn.addEventListener('click', () => showCantCallReason('partner1'));
+partner2CantCallBtn.addEventListener('click', () => showCantCallReason('partner2'));
+
+// Submit and cancel handlers
+partner1CantCallSubmit.addEventListener('click', () => submitCantCallReason('partner1'));
+partner2CantCallSubmit.addEventListener('click', () => submitCantCallReason('partner2'));
+partner1CantCallCancel.addEventListener('click', () => hideCantCallReason('partner1'));
+partner2CantCallCancel.addEventListener('click', () => hideCantCallReason('partner2'));
 
 // Close celebration when clicked
 celebration.addEventListener('click', () => {
@@ -392,7 +446,7 @@ function checkDailyReset() {
     const lastReset = localStorage.getItem('lastResetPeriod');
     
     if (lastReset !== currentPeriod) {
-        // New period, reset only call status (keep messages)
+        // New period, reset only call status (keep messages and cantCallReason)
         if (statusRef) {
             statusRef.child('partner1').update({
                 wantsToCallToday: false,
@@ -411,6 +465,7 @@ function checkDailyReset() {
         state.partner2.readyToCallRn = false;
         localStorage.setItem('lastResetPeriod', currentPeriod);
         updateUI();
+        updateCantCallReasons();
     }
 }
 
@@ -535,6 +590,7 @@ setTodayDate();
 setupFirebaseListeners(); // This will call checkDailyReset after Firebase data loads
 updateUI(); // Initial UI update (will be updated again when Firebase loads)
 updateMessages(); // Initial messages update
+updateCantCallReasons(); // Initial cant call reasons update
 checkCallRecordedToday();
 
 // Fallback: if Firebase doesn't load within 2 seconds, still check reset
@@ -544,6 +600,7 @@ setTimeout(() => {
         checkDailyReset();
         updateUI();
         updateMessages();
+        updateCantCallReasons();
     }
 }, 2000);
 
@@ -551,15 +608,10 @@ setTimeout(() => {
 updateCharCount('partner1');
 updateCharCount('partner2');
 
-// Update message bubbles on window resize
+// Update messages on window resize
 window.addEventListener('resize', () => {
     setTimeout(updateMessages, 100);
 });
-
-// Also update bubbles after a short delay to ensure proper positioning
-setTimeout(() => {
-    updateMessages();
-}, 500);
 
 // Add some magic - floating hearts animation
 function createFloatingHeart() {

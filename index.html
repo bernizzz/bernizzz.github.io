@@ -24,9 +24,13 @@
             <!-- Arthur -->
             <div class="heart-section" id="partner1-section">
                 <div class="message-container">
-                    <div class="received-message" id="partner1-received-message">
+                    <div class="received-message" id="partner1-received-message" style="display: none;">
                         <div class="received-message-label">from Bernice:</div>
                         <div class="received-message-text" id="partner1-received-text"></div>
+                    </div>
+                    <div class="received-cant-call" id="partner1-received-cant-call" style="display: none;">
+                        <div class="received-cant-call-label">Bernice can't call today:</div>
+                        <div class="received-cant-call-text" id="partner1-received-cant-call-text"></div>
                     </div>
                     <div class="message-input-wrapper">
                         <textarea 
@@ -59,6 +63,26 @@
                         </svg>
                         <span class="btn-label">ready to call rn</span>
                     </button>
+                    <button class="action-btn cant-call-btn" id="partner1-cant-call-btn" data-partner="partner1" data-action="cantCall">
+                        <svg class="btn-icon moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="btn-label">can't call today</span>
+                    </button>
+                </div>
+                <div class="cant-call-reason-container" id="partner1-cant-call-reason-container" style="display: none;">
+                    <div class="cant-call-reason-label">Why can't you call today?</div>
+                    <textarea 
+                        class="cant-call-reason-input" 
+                        id="partner1-cant-call-reason" 
+                        placeholder="explain why you can't call today..."
+                        maxlength="300"
+                        rows="3"
+                    ></textarea>
+                    <div class="cant-call-reason-actions">
+                        <button class="cant-call-submit-btn" id="partner1-cant-call-submit" data-partner="partner1">Submit</button>
+                        <button class="cant-call-cancel-btn" id="partner1-cant-call-cancel" data-partner="partner1">Cancel</button>
+                    </div>
                 </div>
                 <div class="partner-name">Arthur</div>
                 <div class="status" id="partner1-status">not ready yet</div>
@@ -71,33 +95,17 @@
                 </div>
             </div>
 
-            <!-- Floating Message Bubbles -->
-            <div class="message-bubble" id="partner1-message-bubble" data-partner="partner1">
-                <div class="bubble-content">💌</div>
-                <div class="bubble-shine"></div>
-            </div>
-            <div class="message-bubble" id="partner2-message-bubble" data-partner="partner2">
-                <div class="bubble-content">💌</div>
-                <div class="bubble-shine"></div>
-            </div>
-
-            <!-- Message Modal -->
-            <div class="message-modal" id="message-modal">
-                <div class="message-modal-content">
-                    <button class="message-modal-close">&times;</button>
-                    <div class="message-modal-header">
-                        <span class="message-modal-from" id="message-modal-from"></span>
-                    </div>
-                    <div class="message-modal-body" id="message-modal-body"></div>
-                </div>
-            </div>
 
             <!-- Bernice -->
             <div class="heart-section" id="partner2-section">
                 <div class="message-container">
-                    <div class="received-message" id="partner2-received-message">
+                    <div class="received-message" id="partner2-received-message" style="display: none;">
                         <div class="received-message-label">from Arthur:</div>
                         <div class="received-message-text" id="partner2-received-text"></div>
+                    </div>
+                    <div class="received-cant-call" id="partner2-received-cant-call" style="display: none;">
+                        <div class="received-cant-call-label">Arthur can't call today:</div>
+                        <div class="received-cant-call-text" id="partner2-received-cant-call-text"></div>
                     </div>
                     <div class="message-input-wrapper">
                         <textarea 
@@ -130,6 +138,26 @@
                         </svg>
                         <span class="btn-label">ready to call rn</span>
                     </button>
+                    <button class="action-btn cant-call-btn" id="partner2-cant-call-btn" data-partner="partner2" data-action="cantCall">
+                        <svg class="btn-icon moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="btn-label">can't call today</span>
+                    </button>
+                </div>
+                <div class="cant-call-reason-container" id="partner2-cant-call-reason-container" style="display: none;">
+                    <div class="cant-call-reason-label">Why can't you call today?</div>
+                    <textarea 
+                        class="cant-call-reason-input" 
+                        id="partner2-cant-call-reason" 
+                        placeholder="explain why you can't call today..."
+                        maxlength="300"
+                        rows="3"
+                    ></textarea>
+                    <div class="cant-call-reason-actions">
+                        <button class="cant-call-submit-btn" id="partner2-cant-call-submit" data-partner="partner2">Submit</button>
+                        <button class="cant-call-cancel-btn" id="partner2-cant-call-cancel" data-partner="partner2">Cancel</button>
+                    </div>
                 </div>
                 <div class="partner-name">Bernice</div>
                 <div class="status" id="partner2-status">not ready yet</div>

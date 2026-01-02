@@ -179,29 +179,30 @@ h1 {
     gap: 0.3rem;
 }
 
+/* Received message styling - same as received-cant-call */
+.received-message {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: linear-gradient(145deg, #fff5f7, #ffe8ed);
+    border: 2px solid rgba(196, 69, 105, 0.2);
+    border-radius: 12px;
+    animation: fadeIn 0.4s ease;
+}
+
 .received-message-label {
-    font-size: 0.7rem;
-    color: var(--rose-light);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.8rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    color: var(--rose-dark);
+    margin-bottom: 0.4rem;
+    opacity: 0.8;
 }
 
 .received-message-text {
+    font-family: 'Quicksand', sans-serif;
     font-size: 0.85rem;
     color: var(--cream);
-    line-height: 1.4;
-    min-height: 1.2rem;
-}
-
-.received-message:empty,
-.received-message:has(.received-message-text:empty) {
-    display: none;
-}
-
-/* Hide received message area when using bubbles */
-.received-message {
-    display: none;
+    line-height: 1.5;
 }
 
 .message-input-wrapper {
@@ -565,9 +566,129 @@ h1 {
     color: var(--text-soft);
 }
 
+/* Moon icon styling - muted theme for can't call */
+.cant-call-btn .moon-icon {
+    color: var(--text-soft);
+}
+
+.cant-call-btn.active .moon-icon {
+    color: #6a4c93;
+    filter: drop-shadow(0 0 8px rgba(106, 76, 147, 0.5));
+}
+
 .btn-label {
     display: block;
     text-align: center;
+}
+
+/* Can't call reason container */
+.cant-call-reason-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: linear-gradient(145deg, #fff5f7, #ffe8ed);
+    border: 2px solid rgba(196, 69, 105, 0.2);
+    border-radius: 15px;
+    width: 100%;
+    animation: fadeIn 0.3s ease;
+}
+
+.cant-call-reason-label {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--rose-dark);
+    margin-bottom: 0.5rem;
+}
+
+.cant-call-reason-input {
+    width: 100%;
+    padding: 0.7rem;
+    border: 2px solid var(--rose);
+    border-radius: 10px;
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.85rem;
+    color: var(--cream);
+    resize: vertical;
+    min-height: 80px;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 4px 15px rgba(173, 20, 87, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.cant-call-reason-input:focus {
+    outline: none;
+    border-color: var(--rose-light);
+    box-shadow: 
+        0 0 20px rgba(196, 69, 105, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.cant-call-reason-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    justify-content: flex-end;
+}
+
+.cant-call-submit-btn,
+.cant-call-cancel-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--rose);
+    border-radius: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cant-call-submit-btn {
+    background: linear-gradient(145deg, var(--rose-light), var(--rose));
+    color: white;
+    box-shadow: 0 2px 8px rgba(196, 69, 105, 0.3);
+}
+
+.cant-call-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(196, 69, 105, 0.4);
+}
+
+.cant-call-cancel-btn {
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+    color: var(--rose-dark);
+}
+
+.cant-call-cancel-btn:hover {
+    background: linear-gradient(145deg, #fff0f3, #ffd6de);
+}
+
+/* Received can't call message */
+.received-cant-call {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: linear-gradient(145deg, #fff5f7, #ffe8ed);
+    border: 2px solid rgba(196, 69, 105, 0.2);
+    border-radius: 12px;
+    animation: fadeIn 0.4s ease;
+}
+
+.received-cant-call-label {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--rose-dark);
+    margin-bottom: 0.4rem;
+    opacity: 0.8;
+}
+
+.received-cant-call-text {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.85rem;
+    color: var(--cream);
+    line-height: 1.5;
+    font-style: italic;
 }
 
 @keyframes pulse-glow {
