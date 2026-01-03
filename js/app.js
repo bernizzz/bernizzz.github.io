@@ -21,14 +21,29 @@ const firebaseConfig = {
 let db = null;
 let statusRef = null;
 let callsRef = null;
+let firebaseInitialized = false;
 
 try {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.database();
-    statusRef = db.ref('call-status');
-    callsRef = db.ref('calls');
+    if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        statusRef = db.ref('call-status');
+        callsRef = db.ref('calls');
+        firebaseInitialized = true;
+        console.log('✅ Firebase initialized successfully');
+        
+        // Test Firebase connection
+        statusRef.once('value', (snapshot) => {
+            console.log('✅ Firebase connection test successful. Current data:', snapshot.val());
+        }).catch((error) => {
+            console.error('❌ Firebase connection test failed:', error);
+        });
+    } else {
+        console.warn('⚠️ Firebase SDK not loaded. Check if Firebase scripts are included in HTML.');
+    }
 } catch (error) {
-    console.log('Firebase not configured yet. Running in local mode.');
+    console.error('❌ Firebase initialization error:', error);
+    console.log('Running in local mode (data will not persist).');
 }
 
 // State
@@ -108,16 +123,23 @@ function sendMessage(partner) {
     updateCharCount(partner);
     
     // Save to Firebase - ensure message is saved
-    if (statusRef) {
+    if (statusRef && firebaseInitialized) {
+        console.log(`💾 Attempting to save message for ${partner}:`, message);
+        
         // Use update() to preserve other fields
         statusRef.child(partner).update({
             sentMessage: message,
             sentMessageTimestamp: Date.now()
         }).then(() => {
-            console.log(`Message saved for ${partner}:`, message);
+            console.log(`✅ Message saved successfully for ${partner}:`, message);
         }).catch((error) => {
-            console.error('Error saving message:', error);
+            console.error(`❌ Error saving message for ${partner}:`, error);
+            if (error.code === 'PERMISSION_DENIED') {
+                alert('⚠️ Permission denied! Please check Firebase database rules.');
+            }
         });
+    } else {
+        console.warn(`⚠️ Firebase not available. Message not saved for ${partner}.`);
     }
     
     // Update message display on partner's side immediately
@@ -262,20 +284,33 @@ function toggleState(partner, action) {
     updateUI();
     
     // Sync to Firebase if configured
-    if (statusRef) {
-        // Use update() to preserve other fields (messages, cantCallReason)
-        statusRef.child(partner).update({
+    if (statusRef && firebaseInitialized) {
+        const updateData = {
             wantsToCallToday: state[partner].wantsToCallToday,
             readyToCallRn: state[partner].readyToCallRn,
             timestamp: Date.now()
-        }).then(() => {
-            console.log(`Button state saved for ${partner}:`, {
-                wantsToCallToday: state[partner].wantsToCallToday,
-                readyToCallRn: state[partner].readyToCallRn
-            });
+        };
+        
+        console.log(`💾 Attempting to save to Firebase for ${partner}:`, updateData);
+        
+        // Use update() to preserve other fields (messages, cantCallReason)
+        statusRef.child(partner).update(updateData).then(() => {
+            console.log(`✅ Button state saved successfully for ${partner}:`, updateData);
         }).catch((error) => {
-            console.error('Error saving button state:', error);
+            console.error(`❌ Error saving button state for ${partner}:`, error);
+            console.error('Error details:', {
+                code: error.code,
+                message: error.message
+            });
+            
+            // Show user-friendly error message
+            if (error.code === 'PERMISSION_DENIED') {
+                alert('⚠️ Permission denied! Please check Firebase database rules. See console for details.');
+            }
         });
+    } else {
+        console.warn(`⚠️ Firebase not available. State changed locally for ${partner} but not saved.`);
+        console.log('Current state:', state[partner]);
     }
 }
 
@@ -364,7 +399,8 @@ function updateCantCallButtonStates() {
 let firebaseDataLoaded = false;
 
 function setupFirebaseListeners() {
-    if (!statusRef) {
+    if (!statusRef || !firebaseInitialized) {
+        console.warn('⚠️ Firebase not available. Running in local mode only.');
         // If Firebase not available, still update UI with current state
         updateUI();
         updateMessages();
@@ -372,9 +408,13 @@ function setupFirebaseListeners() {
         return;
     }
     
+    console.log('👂 Setting up Firebase listener...');
+    
     // Listen to the entire call-status node
     statusRef.on('value', (snapshot) => {
         const data = snapshot.val();
+        console.log('📥 Firebase data received:', data);
+        
         if (data) {
             // Update partner1 state
             if (data.partner1) {
