@@ -109,9 +109,6 @@ function sendMessage(partner) {
     
     // Save to Firebase - ensure message is saved
     if (statusRef) {
-        // Mark that we're making a local update
-        lastLocalUpdate[partner] = Date.now();
-        
         // Use update() to preserve other fields
         statusRef.child(partner).update({
             sentMessage: message,
@@ -266,22 +263,18 @@ function toggleState(partner, action) {
     
     // Sync to Firebase if configured
     if (statusRef) {
-        const updateData = {
+        // Use update() to preserve other fields (messages, cantCallReason)
+        statusRef.child(partner).update({
             wantsToCallToday: state[partner].wantsToCallToday,
             readyToCallRn: state[partner].readyToCallRn,
             timestamp: Date.now()
-        };
-        
-        // Mark that we're making a local update
-        lastLocalUpdate[partner] = Date.now();
-        
-        // Use update() to preserve other fields (messages, cantCallReason)
-        statusRef.child(partner).update(updateData).then(() => {
-            console.log(`Button state saved for ${partner}:`, updateData);
+        }).then(() => {
+            console.log(`Button state saved for ${partner}:`, {
+                wantsToCallToday: state[partner].wantsToCallToday,
+                readyToCallRn: state[partner].readyToCallRn
+            });
         }).catch((error) => {
             console.error('Error saving button state:', error);
-            // Revert UI on error
-            updateUI();
         });
     }
 }
@@ -323,9 +316,6 @@ function submitCantCallReason(partner) {
     
     // Save to Firebase
     if (statusRef) {
-        // Mark that we're making a local update
-        lastLocalUpdate[partner] = Date.now();
-        
         // Use update() to preserve other fields
         statusRef.child(partner).update({
             cantCallReason: reason,
@@ -372,63 +362,52 @@ function updateCantCallButtonStates() {
 
 // Listen for Firebase updates
 let firebaseDataLoaded = false;
-let lastLocalUpdate = { partner1: 0, partner2: 0 }; // Track when we last updated locally
 
 function setupFirebaseListeners() {
     if (!statusRef) {
         // If Firebase not available, still update UI with current state
         updateUI();
         updateMessages();
+        updateCantCallReasons();
         return;
     }
     
+    // Listen to the entire call-status node
     statusRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
+            // Update partner1 state
             if (data.partner1) {
-                // Only update from Firebase if we haven't made a local update in the last 500ms
-                // This prevents overwriting recent local changes
-                const timeSinceLocalUpdate = Date.now() - lastLocalUpdate.partner1;
-                if (timeSinceLocalUpdate > 500 || timeSinceLocalUpdate === 0) {
-                    // Preserve boolean values correctly - use !== undefined to check if value exists
-                    if (data.partner1.wantsToCallToday !== undefined) {
-                        state.partner1.wantsToCallToday = Boolean(data.partner1.wantsToCallToday);
-                    }
-                    if (data.partner1.readyToCallRn !== undefined) {
-                        state.partner1.readyToCallRn = Boolean(data.partner1.readyToCallRn);
-                    }
+                if (data.partner1.wantsToCallToday !== undefined) {
+                    state.partner1.wantsToCallToday = Boolean(data.partner1.wantsToCallToday);
+                }
+                if (data.partner1.readyToCallRn !== undefined) {
+                    state.partner1.readyToCallRn = Boolean(data.partner1.readyToCallRn);
                 }
                 if (data.partner1.message !== undefined) {
                     state.partner1.message = data.partner1.message || '';
                 }
-                if (data.partner1.sentMessage !== undefined && data.partner1.sentMessage) {
-                    state.partner1.sentMessage = data.partner1.sentMessage;
-                } else if (data.partner1.sentMessage === null || data.partner1.sentMessage === '') {
-                    state.partner1.sentMessage = '';
+                if (data.partner1.sentMessage !== undefined) {
+                    state.partner1.sentMessage = data.partner1.sentMessage || '';
                 }
                 if (data.partner1.cantCallReason !== undefined) {
                     state.partner1.cantCallReason = data.partner1.cantCallReason || '';
                 }
             }
+            
+            // Update partner2 state
             if (data.partner2) {
-                // Only update from Firebase if we haven't made a local update in the last 500ms
-                const timeSinceLocalUpdate = Date.now() - lastLocalUpdate.partner2;
-                if (timeSinceLocalUpdate > 500 || timeSinceLocalUpdate === 0) {
-                    // Preserve boolean values correctly - use !== undefined to check if value exists
-                    if (data.partner2.wantsToCallToday !== undefined) {
-                        state.partner2.wantsToCallToday = Boolean(data.partner2.wantsToCallToday);
-                    }
-                    if (data.partner2.readyToCallRn !== undefined) {
-                        state.partner2.readyToCallRn = Boolean(data.partner2.readyToCallRn);
-                    }
+                if (data.partner2.wantsToCallToday !== undefined) {
+                    state.partner2.wantsToCallToday = Boolean(data.partner2.wantsToCallToday);
+                }
+                if (data.partner2.readyToCallRn !== undefined) {
+                    state.partner2.readyToCallRn = Boolean(data.partner2.readyToCallRn);
                 }
                 if (data.partner2.message !== undefined) {
                     state.partner2.message = data.partner2.message || '';
                 }
-                if (data.partner2.sentMessage !== undefined && data.partner2.sentMessage) {
-                    state.partner2.sentMessage = data.partner2.sentMessage;
-                } else if (data.partner2.sentMessage === null || data.partner2.sentMessage === '') {
-                    state.partner2.sentMessage = '';
+                if (data.partner2.sentMessage !== undefined) {
+                    state.partner2.sentMessage = data.partner2.sentMessage || '';
                 }
                 if (data.partner2.cantCallReason !== undefined) {
                     state.partner2.cantCallReason = data.partner2.cantCallReason || '';
