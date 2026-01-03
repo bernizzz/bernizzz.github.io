@@ -107,15 +107,19 @@ function sendMessage(partner) {
     messageEl.value = '';
     updateCharCount(partner);
     
-    // Save to Firebase
+    // Save to Firebase - ensure message is saved
     if (statusRef) {
         statusRef.child(partner).update({
-            sentMessage: state[partner].sentMessage,
+            sentMessage: message, // Save the message directly
             sentMessageTimestamp: Date.now()
+        }).then(() => {
+            console.log(`Message saved for ${partner}:`, message);
+        }).catch((error) => {
+            console.error('Error saving message:', error);
         });
     }
     
-    // Update message display on partner's side
+    // Update message display on partner's side immediately
     const otherPartner = partner === 'partner1' ? 'partner2' : 'partner1';
     updateMessageDisplay(otherPartner);
 }
@@ -127,11 +131,12 @@ function updateMessageDisplay(partner) {
     const receivedMessageEl = partner === 'partner1' ? partner1ReceivedMessage : partner2ReceivedMessage;
     const receivedTextEl = partner === 'partner1' ? partner1ReceivedText : partner2ReceivedText;
     
-    if (message) {
+    if (message && message.trim()) {
         receivedTextEl.textContent = message;
         receivedMessageEl.style.display = 'block';
     } else {
         receivedMessageEl.style.display = 'none';
+        receivedTextEl.textContent = '';
     }
 }
 
@@ -260,6 +265,13 @@ function toggleState(partner, action) {
             wantsToCallToday: state[partner].wantsToCallToday,
             readyToCallRn: state[partner].readyToCallRn,
             timestamp: Date.now()
+        }).then(() => {
+            console.log(`Button state saved for ${partner}:`, {
+                wantsToCallToday: state[partner].wantsToCallToday,
+                readyToCallRn: state[partner].readyToCallRn
+            });
+        }).catch((error) => {
+            console.error('Error saving button state:', error);
         });
     }
 }
@@ -304,6 +316,10 @@ function submitCantCallReason(partner) {
         statusRef.child(partner).update({
             cantCallReason: reason,
             timestamp: Date.now()
+        }).then(() => {
+            console.log(`Can't call reason saved for ${partner}:`, reason);
+        }).catch((error) => {
+            console.error('Error saving cant call reason:', error);
         });
     }
     
@@ -333,6 +349,13 @@ function updateCantCallReasons() {
     }
 }
 
+// Update can't call button states based on whether reason exists
+function updateCantCallButtonStates() {
+    // If a reason exists, the button should not be active (reason already submitted)
+    // But we don't need to show it as active - the reason display is enough
+    // This function is kept for potential future use
+}
+
 // Listen for Firebase updates
 let firebaseDataLoaded = false;
 
@@ -348,33 +371,43 @@ function setupFirebaseListeners() {
         const data = snapshot.val();
         if (data) {
             if (data.partner1) {
-                state.partner1.wantsToCallToday = data.partner1.wantsToCallToday || false;
-                state.partner1.readyToCallRn = data.partner1.readyToCallRn || false;
+                // Preserve boolean values correctly - use !== undefined to check if value exists
+                if (data.partner1.wantsToCallToday !== undefined) {
+                    state.partner1.wantsToCallToday = Boolean(data.partner1.wantsToCallToday);
+                }
+                if (data.partner1.readyToCallRn !== undefined) {
+                    state.partner1.readyToCallRn = Boolean(data.partner1.readyToCallRn);
+                }
                 if (data.partner1.message !== undefined) {
                     state.partner1.message = data.partner1.message || '';
                 }
-                if (data.partner1.sentMessage) {
+                if (data.partner1.sentMessage !== undefined && data.partner1.sentMessage) {
                     state.partner1.sentMessage = data.partner1.sentMessage;
+                } else if (data.partner1.sentMessage === null || data.partner1.sentMessage === '') {
+                    state.partner1.sentMessage = '';
                 }
-                if (data.partner1.cantCallReason) {
-                    state.partner1.cantCallReason = data.partner1.cantCallReason;
-                } else {
-                    state.partner1.cantCallReason = '';
+                if (data.partner1.cantCallReason !== undefined) {
+                    state.partner1.cantCallReason = data.partner1.cantCallReason || '';
                 }
             }
             if (data.partner2) {
-                state.partner2.wantsToCallToday = data.partner2.wantsToCallToday || false;
-                state.partner2.readyToCallRn = data.partner2.readyToCallRn || false;
+                // Preserve boolean values correctly - use !== undefined to check if value exists
+                if (data.partner2.wantsToCallToday !== undefined) {
+                    state.partner2.wantsToCallToday = Boolean(data.partner2.wantsToCallToday);
+                }
+                if (data.partner2.readyToCallRn !== undefined) {
+                    state.partner2.readyToCallRn = Boolean(data.partner2.readyToCallRn);
+                }
                 if (data.partner2.message !== undefined) {
                     state.partner2.message = data.partner2.message || '';
                 }
-                if (data.partner2.sentMessage) {
+                if (data.partner2.sentMessage !== undefined && data.partner2.sentMessage) {
                     state.partner2.sentMessage = data.partner2.sentMessage;
+                } else if (data.partner2.sentMessage === null || data.partner2.sentMessage === '') {
+                    state.partner2.sentMessage = '';
                 }
-                if (data.partner2.cantCallReason) {
-                    state.partner2.cantCallReason = data.partner2.cantCallReason;
-                } else {
-                    state.partner2.cantCallReason = '';
+                if (data.partner2.cantCallReason !== undefined) {
+                    state.partner2.cantCallReason = data.partner2.cantCallReason || '';
                 }
             }
             
@@ -385,6 +418,7 @@ function setupFirebaseListeners() {
                 checkDailyReset();
             }
             
+            // Always update UI after loading data
             updateUI();
             updateMessages();
             updateCantCallReasons();
