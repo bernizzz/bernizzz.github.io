@@ -1,0 +1,138 @@
+/* ===========================================
+   Animations - All Keyframes
+   =========================================== */
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from { 
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 
+            0 0 30px rgba(196, 69, 105, 0.25),
+            inset 0 0 20px rgba(196, 69, 105, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 0 50px rgba(196, 69, 105, 0.4),
+            inset 0 0 30px rgba(196, 69, 105, 0.15);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.1); }
+    60% { transform: scale(1); }
+}
+
+@keyframes connection-flow {
+    0% {
+        left: -30px;
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        left: 110px;
+        opacity: 0;
+    }
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 0.3;
+        transform: translateY(-50%) scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.2);
+    }
+}
+
+@keyframes bubble-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes bubble-shine {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(255, 182, 193, 0.6),
+            0 0 40px rgba(255, 105, 180, 0.4),
+            inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(255, 182, 193, 0.8),
+            0 0 60px rgba(255, 105, 180, 0.6),
+            inset 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+}
+
+@keyframes shine-rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes celebrate-pulse {
+    0%, 100% { 
+        box-shadow: 
+            0 25px 80px rgba(196, 69, 105, 0.15),
+            0 0 100px rgba(196, 69, 105, 0.1);
+    }
+    50% { 
+        box-shadow: 
+            0 25px 80px rgba(196, 69, 105, 0.2),
+            0 0 150px rgba(196, 69, 105, 0.2);
+    }
+}
+
+@keyframes sparkle-float {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) scale(1.5) rotate(180deg);
+    }
+}
+
+@keyframes sparkle-particle {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.8) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--sparkle-x, 0), var(--sparkle-y, -50px)) scale(1.5) rotate(360deg);
+    }
+}

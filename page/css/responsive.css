@@ -1,0 +1,40 @@
+/* ===========================================
+   Responsive - Mobile Breakpoints
+   =========================================== */
+
+@media (max-width: 600px) {
+    .hearts-container {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .connection {
+        transform: rotate(90deg);
+        padding: 1rem 0;
+    }
+    
+    .heart-section {
+        padding: 1.5rem;
+    }
+    
+    .action-btn {
+        min-width: 160px;
+        padding: 0.75rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .celebration-content {
+        padding: 2rem;
+        margin: 1rem;
+    }
+
+    .message-bubble#partner1-message-bubble {
+        top: 10%;
+        right: 2%;
+    }
+    
+    .message-bubble#partner2-message-bubble {
+        top: 10%;
+        left: 2%;
+    }
+}

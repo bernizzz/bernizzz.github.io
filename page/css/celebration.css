@@ -1,0 +1,55 @@
+/* ===========================================
+   Celebration - Both Ready Overlay
+   =========================================== */
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(255, 182, 193, 0.4) 0%, rgba(255,245,247,0.9) 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 100;
+}
+
+.celebration.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.celebration-content {
+    background: linear-gradient(145deg, #ffffff, #fff5f7);
+    padding: 3rem 4rem;
+    border-radius: 20px;
+    border: 1px solid rgba(196, 69, 105, 0.2);
+    box-shadow: 
+        0 25px 80px rgba(196, 69, 105, 0.15),
+        0 0 100px rgba(196, 69, 105, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+}
+
+.celebration.active .celebration-content {
+    transform: scale(1);
+    animation: celebrate-pulse 2s ease-in-out infinite;
+}
+
+.celebration h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+}
+
+.celebration p {
+    color: var(--rose-light);
+    font-size: 1.1rem;
+}

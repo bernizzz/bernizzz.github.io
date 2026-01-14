@@ -1,0 +1,22 @@
+/* ===========================================
+   Main Styles Entry Point
+   Import all modular CSS files
+   =========================================== */
+
+/* Core theme and variables */
+@import url('app_theme.css');
+
+/* Page structure */
+@import url('page_wrapper.css');
+
+/* Components */
+@import url('heart_section.css');
+@import url('msg_box.css');
+@import url('buttons.css');
+@import url('celebration.css');
+@import url('call_record.css');
+@import url('footer.css');
+
+/* Utilities */
+@import url('animations.css');
+@import url('responsive.css');

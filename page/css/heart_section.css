@@ -1,0 +1,123 @@
+/* ===========================================
+   Heart Section - Partner Cards & Connection
+   =========================================== */
+
+.heart-section {
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    align-items: start;
+    justify-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    width: 100%;
+    border-radius: 20px;
+    transition: background 0.6s ease, box-shadow 0.6s ease;
+    background: linear-gradient(145deg, rgba(252, 228, 236, 0.3), rgba(248, 187, 217, 0.2));
+}
+
+.heart-section.wants-today {
+    background: linear-gradient(145deg, rgba(255, 182, 193, 0.4), rgba(255, 105, 180, 0.3));
+    box-shadow: 0 0 30px rgba(255, 182, 193, 0.2);
+}
+
+.heart-section.ready-rn {
+    background: linear-gradient(145deg, rgba(220, 20, 60, 0.4), rgba(199, 21, 133, 0.3));
+    box-shadow: 0 0 40px rgba(220, 20, 60, 0.3), 0 0 60px rgba(255, 105, 180, 0.2);
+}
+
+.partner-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--cream);
+    text-align: center;
+    padding: 0.5rem 1rem;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    grid-row: 3;
+}
+
+.status {
+    font-size: 0.95rem;
+    color: var(--text-soft);
+    font-weight: 600;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    min-height: 1.5rem;
+    grid-row: 4;
+}
+
+.status.ready {
+    color: var(--rose-light);
+    font-weight: 700;
+}
+
+/* Connection Line */
+.connection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    width: 100%;
+}
+
+.connection-line {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--rose-dark), var(--gold), var(--rose-dark));
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    margin-top: calc(50px + 0.5rem + 60px + 0.3rem + 0.7rem * 2 + 0.6rem + 0.75rem * 2 + 0.6rem);
+}
+
+.connection-pulse {
+    position: absolute;
+    top: 0;
+    left: -30px;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.8) 20%,
+        rgba(255, 182, 193, 0.9) 50%,
+        rgba(255, 255, 255, 0.8) 80%,
+        transparent
+    );
+    opacity: 0;
+    box-shadow: 
+        0 0 10px rgba(255, 182, 193, 0.8),
+        0 0 20px rgba(255, 105, 180, 0.6),
+        inset 0 0 10px rgba(255, 255, 255, 0.5);
+    border-radius: 2px;
+}
+
+.connection-pulse.active {
+    animation: connection-flow 1.5s ease-in-out infinite;
+}
+
+.connection-pulse.active::before,
+.connection-pulse.active::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 182, 193, 0.8) 50%, transparent 100%);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 12px rgba(255, 182, 193, 0.8);
+    animation: sparkle 0.6s ease-in-out infinite;
+}
+
+.connection-pulse.active::before {
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.connection-pulse.active::after {
+    right: 20%;
+    animation-delay: 0.3s;
+}

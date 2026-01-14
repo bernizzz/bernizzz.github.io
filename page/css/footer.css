@@ -1,0 +1,43 @@
+/* ===========================================
+   Footer - Navigation & Hints
+   =========================================== */
+
+footer {
+    margin-top: 2rem;
+    animation: fadeIn 1s ease-out 0.7s both;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.nav-link {
+    display: inline-block;
+    color: var(--rose-light);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border: 2px solid var(--rose);
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    background: linear-gradient(145deg, #ffffff, #fce4ec);
+}
+
+.nav-link:hover {
+    border-color: var(--rose-dark);
+    background: linear-gradient(145deg, #fce4ec, #f8bbd9);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(173, 20, 87, 0.25);
+}
+
+.hint {
+    font-size: 0.85rem;
+    color: var(--text-soft);
+    font-weight: 500;
+    opacity: 0.8;
+}
